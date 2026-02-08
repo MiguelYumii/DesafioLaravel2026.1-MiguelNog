@@ -36,12 +36,22 @@
 
                     <tbody>
                       
+                        
+                        @foreach ($users as $Usuario)
                         <tr class="odd:bg-neutral-primary even:bg-neutral-secondary-soft border-b border-default  ">
-                            <th class="px-6 py-4" > 1 </th>
-                            <td class="px-6 py-4">  <img src="/assets/Logos/UserPF.png" class="w-14 h-14 rounded-full border-2 border-[#4a7bb7]"> </td>
-                            <td class="px-6 py-4"> Yumii </td>
-                            <td class="px-6 py-4"> yumii@gmail.com </td>
-                            <td class="px-6 py-4"> Administrador </td>
+                            <th class="px-6 py-4" > {{$Usuario->user_id}} </th>
+                            <td class="px-6 py-4">  <img src="{{$Usuario->user_pf}}" class="w-14 h-14 rounded-full border-2 border-[#4a7bb7]"> </td>
+                            <td class="px-6 py-4"> {{$Usuario->user_name}} </td>
+                            <td class="px-6 py-4"> {{$Usuario->user_email}} </td>
+
+                            <td class="px-6 py-4">
+                                @if($Usuario->user_adm == 1)
+                                    Administrador
+                                @else
+                                    Usuário
+                                @endif
+                            </td>
+
                             <td class="px-6 py-4">
                                 <div class="flex items-center justify-center gap-7">
                                     <button  data-modal-target="ver-modal" data-modal-toggle="ver-modal" class="font-medium text-fg-brand hover:underline">Ver</button>
@@ -52,6 +62,9 @@
                         </tr>
                         <tr class="odd:bg-neutral-primary even:bg-neutral-secondary-soft border-b border-default">
                         
+                        @endforeach
+
+
                     </tbody>
                     
                 </table>
@@ -69,6 +82,8 @@
 
 <!-- MODAL VER USUÁRIO -->
 
+
+ @foreach ($users as $Usuario)
 <div id="ver-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-md max-h-full">
         <div class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
@@ -85,50 +100,62 @@
                 <div class="col-span-2">
                     <label class="block mb-2.5 text-sm font-medium text-heading">Nome</label>
                     <div class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
-                        Yumii Norgget da Silva
+                        {{$Usuario->user_name}}
                     </div>
                 </div>
 
                 <div class="col-span-2">
                     <label class="block mb-2.5 text-sm font-medium text-heading">Email</label>
                     <div class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
-                        yumii@gmail.com
+                        {{$Usuario->user_email}}
                     </div>
                 </div>
 
                 <div class="col-span-2">
                     <label class="block mb-2.5 text-sm font-medium text-heading">Senha</label>
                     <div class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
-                        ••••••••••••
+                        {{$Usuario->user_password}}
                     </div>
                 </div>
+
+
+                
+                @php
+                    $enderecoUsuario = $enderecos->first(function($e) use ($Usuario) {
+                        return $e->usuarios_user_id == $Usuario->user_id;
+                    });
+                @endphp
+                @if($enderecoUsuario)
+                <div class="col-span-2 sm:col-span-1">
+                    <label class="block mb-2.5 text-sm font-medium text-heading">Número da Residência</label>
+                    <div class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
+                        {{$enderecoUsuario->endress_StreetNumber}}
+                    </div>
+                </div>
+
 
                 <div class="col-span-2 sm:col-span-1">
                     <label class="block mb-2.5 text-sm font-medium text-heading">Cep</label>
                     <div class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
-                        20000-000
+                        {{$enderecoUsuario->endress_cep}}
                     </div>
                 </div>
-
-                <div class="col-span-2 sm:col-span-1">
-                    <label class="block mb-2.5 text-sm font-medium text-heading">Número da Residência</label>
-                    <div class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
-                        123
-                    </div>
-                </div>
+                
 
                 <div class="col-span-2">
                     <label class="block mb-2.5 text-sm font-medium text-heading">Complemento</label>
                     <div class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
-                        Apartamento 402, Bloco B
+                        {{$enderecoUsuario->endress_StreetExtra}}
                     </div>
                 </div>
-
+                @endif
                 
+
+
                 <div class="col-span-2">
                     <label class="block mb-2.5 text-sm font-medium text-heading">CPF</label>
                     <div class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
-                        777.777.777-77
+                        {{$Usuario->user_cpf}}
                     </div>
                 </div>
 
@@ -136,18 +163,19 @@
                 <div class="col-span-2 sm:col-span-1">
                     <label class="block mb-2.5 text-sm font-medium text-heading">Número de Telefone</label>
                     <div class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
-                        (11) 99999-9999
+                        {{$Usuario->user_phone}}
                     </div>
                 </div>
 
                 <div class="col-span-2 sm:col-span-1">
                     <label class="block mb-2.5 text-sm font-medium text-heading">Data de Nascimento</label>
                     <div class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
-                        01/01/2000
+                        {{ \Carbon\Carbon::parse($Usuario->user_birthday)->format('d/m/Y') }}
                     </div>
-                </div>
+                </div>  
             </div>
 
+        @endforeach
             <div class="flex items-center justify-end space-x-4 border-t border-default pt-4 md:pt-6">
                 <button data-modal-hide="ver-modal" type="button" class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-6 py-2.5 focus:outline-none transition-all">
                     Fechar
@@ -192,12 +220,7 @@
             </div>
         </div>
 
-<!-- ================================ -->
-
-
-
-
-
+<!-- ========================== -->
 
 
 
@@ -299,9 +322,6 @@
 </div> 
 
 <!-- =============================== -->
-
-
-
 
 
 

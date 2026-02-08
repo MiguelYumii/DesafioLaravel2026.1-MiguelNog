@@ -16,9 +16,9 @@ Route::get('/Navbar', function () {
     return view('Navbar'); 
 });
     
-Route::get('/CRUD_Usuario', function () {
-    return view('CRUD_Usuario'); 
-});
+
+use App\Http\Controllers\UsersController;
+Route::get('/CRUD_Usuario', [UsersController::class, 'index']);
 
 
 
@@ -37,5 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/users', [UsersController::class, 'index'])->name('usuarios');
 
 require __DIR__.'/auth.php';
