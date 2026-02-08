@@ -25,6 +25,7 @@
                             <th scope="col" class="px-6 py-3 font-medium"> Foto </th>
                             <th scope="col" class="px-6 py-3 font-medium"> Nome </th>
                             <th scope="col" class="px-6 py-3 font-medium"> Email </th>
+                            <th scope="col" class="px-6 py-3 font-medium"> Cargo </th>
                             <th scope="col" class="px-6 py-3 font-medium flex items-center justify-center"> Ação 
                                  <button  data-modal-target="criar-modal" data-modal-toggle="criar-modal" class="px-6 py-3 font-medium flex items-center justify-center "> Criar Usuário </button>
                                 
@@ -40,6 +41,7 @@
                             <td class="px-6 py-4">  <img src="/assets/Logos/UserPF.png" class="w-14 h-14 rounded-full border-2 border-[#4a7bb7]"> </td>
                             <td class="px-6 py-4"> Yumii </td>
                             <td class="px-6 py-4"> yumii@gmail.com </td>
+                            <td class="px-6 py-4"> Administrador </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center justify-center gap-7">
                                     <button  data-modal-target="ver-modal" data-modal-toggle="ver-modal" class="font-medium text-fg-brand hover:underline">Ver</button>
