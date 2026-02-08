@@ -55,16 +55,12 @@
                 <div class=" self-center w-fit h-fit flex items-center bg-[#2b5a97] rounded-full p-1 pr-5 border border-[#3b6ba7] shadow-lg">
         
                     <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-[#4a7bb7] ">
-                            <img 
-                            src="/assets/Logos/UserPF.png"
-                            alt="Avatar Conquitos" 
-                            class="w-full h-full object-cover"
-                            > <!-- Imagem do Usuário -->
+                            <img src="/assets/Logos/UserPF.png" class="w-full h-full object-cover">
                     </div>
         
                     <div class="ml-3 flex flex-col justify-center leading-tight">
-                        <!-- Username --> <span class="text-white text-xl font-bold">Yumii</span>
-                        <!-- Cargo -->    <span class="text-gray-300 text-[10px] uppercase tracking-[0.15em] font-medium"> Administrador </span>
+                      <span class="text-white text-xl font-bold">Yumii</span>
+                       <span class="text-gray-300 text-[10px] uppercase tracking-[0.15em] font-medium"> Administrador </span>
                     </div>
 
                 </div>
