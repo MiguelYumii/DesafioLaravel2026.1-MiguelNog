@@ -7,6 +7,25 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('/Pagina_Inicial', function () {
+    return view('Pagina_Inicial'); 
+});
+    
+Route::get('/Navbar', function () {
+    return view('Navbar'); 
+});
+    
+    
+
+
+
+
+
+
+
+
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

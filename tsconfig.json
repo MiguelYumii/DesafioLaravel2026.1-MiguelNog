@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+      "lib": ["dom", "es2015"],
+      "outDir": "./lib/cjs/",
+      "sourceMap": true,
+      "declaration": true,
+      "noImplicitAny": true,
+      "module": "commonjs",
+      "target": "es5",
+      "allowJs": true,
+      "moduleResolution": "node"
+  },
+"include": [
+    "resources/js/**/*.ts",
+    "resources/js/**/*.d.ts",
+    "resources/js/**/*.vue" 
+  ],
+  "exclude": ["node_modules", "dist", "lib"]
+}
