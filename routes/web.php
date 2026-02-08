@@ -16,8 +16,8 @@ Route::get('/Navbar', function () {
     return view('Navbar'); 
 });
     
-Route::get('/CRUD_Usuario', function () {
-    return view('CRUD_Usuario'); 
+Route::get('/CRUD_Adm', function () {
+    return view('CRUD_Adm'); 
 });
 
 
