@@ -17,14 +17,14 @@
 
 <header>   
 
-<nav class="relative bg-[#03223F] " style=" height: 140px;">
+<nav class="relative bg-[#03223F] " style=" height: 110px;">
 
     <div class="grid grid-cols-8 gap-4">
         
 
         <!-- Logo do Site -->
         <a href="/" class="text-2xl font-bold text-white" style="display: flex  justify-content: center">
-            <img src="/assets/Logos/Logo_MouseTech2.png" alt="Logo Mouse Tech" style="height: 130px"
+            <img src="/assets/Logos/Logo_MouseTech2.png" alt="Logo Mouse Tech" style="height: 110px"
                 class="">
         </a>
 
