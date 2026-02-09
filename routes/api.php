@@ -12,3 +12,4 @@ Route::get('showUser', [UserController::class, 'showUser']);
 Route::get('showAdmin', [AdminController::class, 'showAdmin']);
 Route::get('showProduct', [ProductController::class, 'showProduct']);
 Route::get('cep/{cep}', [CepController::class, 'show']);
+

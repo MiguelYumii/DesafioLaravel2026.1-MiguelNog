@@ -38,6 +38,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/users', [UsersController::class, 'index'])->name('usuarios');
+
+
+
+Route::get('/users', [UsersController::class, 'index'])->name('usuarios');  //Visualizar
+Route::put('/users/{user}', [UsersController::class, 'update'])->name('update'); //Editar
+Route::post('/users', [UsersController::class, 'store'])->name('users.store');  //Criar 
+
 
 require __DIR__.'/auth.php';

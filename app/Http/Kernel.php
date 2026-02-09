@@ -21,10 +21,11 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
-
+       
         'api' => [
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
-}
+}  //essa parte toda do código eu encontrei em um vídeo, sem isso aqui, o código não fucnionava, ta  
+   // diferente do tutorial do lucas, dps tenho q revisar isso pra otimizar

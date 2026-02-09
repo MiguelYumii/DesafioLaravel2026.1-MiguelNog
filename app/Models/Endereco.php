@@ -19,7 +19,9 @@ class Endereco extends Authenticatable
 
     //colunas pro laravel preencher
     protected $fillable = [
-        'endress_photo',
+        'endress_Bairro',
+        'endress_City',
+        'endress_Estado',
         'endress_StreetNumber',
         'endress_street',
         'endress_StreetExtra',
