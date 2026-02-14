@@ -23,11 +23,6 @@ Route::get('/CRUD_Usuario', [UsersController::class, 'index']);
 
 
 
-
-
-
-
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -38,6 +33,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/users', [UsersController::class, 'index'])->name('usuarios');
+
+
+
+
+Route::get('/users', [UsersController::class, 'index'])->name('index');
+Route::put('/users/{id}', [UsersController::class, 'update'])->name('update');
+
+
+
+
+
 
 require __DIR__.'/auth.php';

@@ -246,13 +246,15 @@
                 </h3>
             </div>
             
-            <form action="#">
+            <form action="{{route('update', $Usuario->user_id)}}" method="POST">
+                @csrf
+                @method('put')
 
                 <img src="/assets/Logos/UserPF.png" class="block mx-auto w-35 h-35 rounded-md mt-5 border-2 border-[#4a7bb7]">
                 <div class="grid gap-4 grid-cols-2 py-4 md:py-6">
                     <div class="col-span-2">
-                        <label for="name" class="block mb-2.5 text-sm font-medium text-heading">Nome</label>
-                        <input type="text" name="name" id="name" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" >
+                        <label for="user_name" class="block mb-2.5 text-sm font-medium text-heading">Nome</label>
+                        <input type="text" name="user_name" id="user_name" value="{{$Usuario->user_name}}" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" required>
                     </div>
 
                     <div class="col-span-2">
