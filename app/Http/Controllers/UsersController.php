@@ -16,13 +16,58 @@ class UsersController extends Controller
 
     }
 
-    public function create() //função pra criar o user
+
+    public function store(Request $request)
     {
-        return view('create_user');
+      
+    
+        $nomeimagem = 'DefaultIcon.png';
+        if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
+            $file = $request->file('foto');
+            $nomeimagem = sha1(uniqid($file->getClientOriginalName(), true)) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('assets/imagemUsuario'), $nomeimagem);
+        }
+
+        $usuario = Usuario::create([
+            'user_name' => $request->input('user_name'),
+            'user_email' => $request->input('user_email'),
+            'user_password' => $request->input('user_password'),
+            'user_phone' => $request->input('user_phone'),
+            'user_birthday' => $request->input('user_birthday'),
+            'user_cpf' => $request->input('user_cpf'),
+            'user_balance' => 0,
+            'user_pf' => 0,
+            'user_adm' => 0,
+            'user_createdBy' => null,
+            'foto' => $nomeimagem
+        ]);
+
+        // Endereço
+        if ($request->filled('endress_StreetNumber') || $request->filled('endress_cep') || $request->filled('endress_StreetExtra')) {
+            Endereco::create([
+                'endress_StreetNumber' => $request->input('endress_StreetNumber'),
+                'endress_cep' => $request->input('endress_cep'),
+                'endress_StreetExtra' => $request->input('endress_StreetExtra'),
+                'usuarios_user_id' => $usuario->user_id,
+            ]);
+        }
+
+        return redirect()->route('index')->with('success', 'Usuário criado com sucesso!');
     }
 
 
+    public function destroy($id)
+    {
+        $usuario = Usuario::findOrFail($id);
+        // parte pra deletar o endereço do usuario
+        Endereco::where('usuarios_user_id', $usuario->user_id)->delete();
+        $usuario->delete();
+        return redirect()->route('index')->with('success', 'Usuário deletado com sucesso!');
+    }
+
     
+
+
     public function update(Request $request, $id) //EDITAR USUÁRIO
     {
 
@@ -58,11 +103,7 @@ class UsersController extends Controller
 
     }
 
-     public function store(Request $request, $id) //EDITAR USUÁRIO
-    {
-
-
-}
+    // ...existing code...
 
 
 
