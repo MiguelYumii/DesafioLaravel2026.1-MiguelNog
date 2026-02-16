@@ -5,14 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Usuario;
 use App\Models\Endereco;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
-    public function index()  //função pra visualizar os user
+    public function index()  
     {
         $users = Usuario::all();
         $enderecos = Endereco::all();
-        return view('CRUD_Usuario', compact('users', 'enderecos')); //compact transforma em vetor pra poder enviar
+        return view('CRUD_Usuario', compact('users', 'enderecos')); 
 
     }
 
@@ -31,7 +32,7 @@ class UsersController extends Controller
         $usuario = Usuario::create([
             'user_name' => $request->input('user_name'),
             'user_email' => $request->input('user_email'),
-            'user_password' => $request->input('user_password'),
+            'user_password' => Hash::make($request->user_password), // Hash = criptografia da senha
             'user_phone' => $request->input('user_phone'),
             'user_birthday' => $request->input('user_birthday'),
             'user_cpf' => $request->input('user_cpf'),
@@ -42,13 +43,28 @@ class UsersController extends Controller
             'foto' => $nomeimagem
         ]);
 
-        // Endereço
+
+        // Endereço do viacep jogado pro banco
         if ($request->filled('endress_StreetNumber') || $request->filled('endress_cep') || $request->filled('endress_StreetExtra')) {
+            $cep = $request->input('endress_cep');
+            $viaCepData = null;
+            if ($cep) {
+                $cep = preg_replace('/[^0-9]/', '', $cep); // tirar formatação do viacepr
+                $response = @file_get_contents("https://viacep.com.br/ws/{$cep}/json/");
+                if ($response !== false) {
+                    $viaCepData = json_decode($response, true);
+                }
+            }
+
             Endereco::create([
                 'endress_StreetNumber' => $request->input('endress_StreetNumber'),
-                'endress_cep' => $request->input('endress_cep'),
+                'endress_cep' => $cep,
                 'endress_StreetExtra' => $request->input('endress_StreetExtra'),
                 'usuarios_user_id' => $usuario->user_id,
+                'endress_Bairro' => $viaCepData['bairro'] ?? '',
+                'endress_street' => $viaCepData['logradouro'] ?? '',
+                'endress_Estado' => $viaCepData['uf'] ?? '',
+                'endress_City' => $viaCepData['localidade'] ?? '',
             ]);
         }
 
@@ -59,7 +75,7 @@ class UsersController extends Controller
     public function destroy($id)
     {
         $usuario = Usuario::findOrFail($id);
-        // parte pra deletar o endereço do usuario
+        // parte pra deletar o endereço do usuario do banco, quando vc deleta o user
         Endereco::where('usuarios_user_id', $usuario->user_id)->delete();
         $usuario->delete();
         return redirect()->route('index')->with('success', 'Usuário deletado com sucesso!');
@@ -76,11 +92,11 @@ class UsersController extends Controller
         $data = $request->all();
         $updateData = [
             'user_name'     => $data['user_name'] ?? $user->user_name,
-            'user_email'    => $data['email'] ?? $user->user_email,
-            'user_password' => $data['senha'] ?? $user->user_password,
-            'user_phone'    => $data['telefone'] ?? $user->user_phone,
-            'user_birthday' => $data['datanascimento'] ?? $user->user_birthday,
-            'user_cpf'      => $data['cpf'] ?? $user->user_cpf,
+            'user_email'    => $data['user_email'] ?? $user->user_email,
+            'user_password' => $data['user_password'] ?? $user->user_password,
+            'user_phone'    => $data['user_phone'] ?? $user->user_phone,
+            'user_birthday' => $data['user_birthday'] ?? $user->user_birthday,
+            'user_cpf'      => $data['user_cpf'] ?? $user->user_cpf,
             'user_balance'  => $user->user_balance,
             'user_pf'       => $user->user_pf,
             'user_adm'      => $user->user_adm,

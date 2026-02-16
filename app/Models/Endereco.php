@@ -23,7 +23,11 @@ class Endereco extends Authenticatable
         'endress_StreetNumber',
         'endress_street',
         'endress_StreetExtra',
+        'endress_Bairro',
+        'endress_City',
+        'endress_Estado',
         'endress_cep',
         'usuarios_user_id'
+
     ];
 }

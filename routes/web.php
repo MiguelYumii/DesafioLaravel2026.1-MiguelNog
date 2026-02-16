@@ -39,10 +39,11 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('/users', [App\Http\Controllers\UsersController::class, 'index'])->name('index');
-Route::get('/users/create', [App\Http\Controllers\UsersController::class, 'create'])->name('users.create');
-Route::post('/users', [App\Http\Controllers\UsersController::class, 'store'])->name('users.store');
+
+Route::get('/users/create', [App\Http\Controllers\UsersController::class, 'create'])->name('create');
+Route::post('/users', [App\Http\Controllers\UsersController::class, 'store'])->name('store');
 Route::put('/users/{id}', [App\Http\Controllers\UsersController::class, 'update'])->name('update');
-Route::delete('/users/{id}', [App\Http\Controllers\UsersController::class, 'destroy'])->name('users.destroy');
+Route::delete('/users/{id}', [App\Http\Controllers\UsersController::class, 'destroy'])->name('destroy');
 
 
 
