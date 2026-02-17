@@ -13,9 +13,11 @@
 </head>
 
 
+<header>
+    @include('Navbar')
+</header>
 
-
-<body class="bg-[#1a1a1a] min-h-screen w-full font-sans text-white p-4">
+<body class="bg-[#1a1a1a] min-h-screen w-full font-sans text-white  m-0 p-0 block" >
 
 
 
