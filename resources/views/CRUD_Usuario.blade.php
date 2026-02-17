@@ -40,7 +40,15 @@
                         @foreach ($users as $Usuario)
                         <tr class="odd:bg-neutral-primary even:bg-neutral-secondary-soft border-b border-default  ">
                             <th class="px-6 py-4" > {{$Usuario->user_id}} </th>
-                            <td class="px-6 py-4">  <img src="{{$Usuario->user_pf}}" class="w-14 h-14 rounded-full border-2 border-[#4a7bb7]"> </td>
+                            <td class="px-6 py-4">
+                                @if($Usuario->user_pf && !empty($Usuario->user_pf))
+                                    <img src="{{$Usuario->user_pf}}" class="w-14 h-14 rounded-full border-2 border-[#4a7bb7] object-cover">
+                                @else
+                                    <div class="w-14 h-14 rounded-full border-2 border-[#4a7bb7] bg-blue-700 flex items-center justify-center text-white text-xl font-bold">
+                                        {{ strtoupper(substr($Usuario->user_name,0,2)) }}
+                                    </div>
+                                @endif
+                            </td>
                             <td class="px-6 py-4"> {{$Usuario->user_name}} </td>
                             <td class="px-6 py-4"> {{$Usuario->user_email}} </td>
 
@@ -82,9 +90,6 @@
 
   @foreach ($users as $Usuario)       
 <!-- MODAL VER USUÁRIO -->
-
-
-
 <div id="ver-modal-{{$Usuario->user_id}}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-md max-h-full">
         <div class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
@@ -112,13 +117,7 @@
                     </div>
                 </div>
 
-                <div class="col-span-2">
-                    <label class="block mb-2.5 text-sm font-medium text-heading">Senha</label>
-                    <div class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
-                        {{$Usuario->user_password}}
-                    </div>
-                </div>
-
+                
 
                 
                 @php
@@ -141,7 +140,35 @@
                         {{$enderecoUsuario->endress_cep}}
                     </div>
                 </div>
+
+                <div class="col-span-2">
+                    <label class="block mb-2.5 text-sm font-medium text-heading">Logradouro</label>
+                    <div class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
+                        {{$enderecoUsuario->endress_street}}
+                    </div>
+                </div>
                 
+                <div class="col-span-2">
+                    <label class="block mb-2.5 text-sm font-medium text-heading">Cidade</label>
+                    <div class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
+                        {{$enderecoUsuario->endress_City}}
+                    </div>
+                </div>
+
+                <div class="col-span-2">
+                    <label class="block mb-2.5 text-sm font-medium text-heading">Bairro</label>
+                    <div class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
+                        {{$enderecoUsuario->endress_Bairro}}
+                    </div>
+                </div>
+
+                <div class="col-span-2">
+                    <label class="block mb-2.5 text-sm font-medium text-heading">Estado</label>
+                    <div class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
+                        {{$enderecoUsuario->endress_Estado}}
+                    </div>
+                </div>
+
 
                 <div class="col-span-2">
                     <label class="block mb-2.5 text-sm font-medium text-heading">Complemento</label>
@@ -202,7 +229,7 @@
 
 <!-- MODAL DE EXCLUIR USUÁRIO -->
 
-    <form action="{{ route('destroy', $Usuario->user_id) }}" method="POST" style="display:inline;">
+    <form action="{{route('destroy',$Usuario->user_id)}}" method="POST" style="display:inline;">
     @csrf
     @method('delete')
 
@@ -239,8 +266,6 @@
 
 
 <!-- MODAL DE EDITAR USUÁRIO -->
-
-
 <div id="editar-modal-{{$Usuario->user_id}}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-md max-h-full">
      
@@ -254,11 +279,15 @@
                 </h3>
             </div>
             
-            <form action="{{route('update', $Usuario->user_id)}}" method="POST">
+            <form action="{{route('update', $Usuario->user_id)}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('put')
 
-                <img src="/assets/Logos/UserPF.png" class="block mx-auto w-35 h-35 rounded-md mt-5 border-2 border-[#4a7bb7]">
+                <img id="preview-edit-{{$Usuario->user_id}}" src="{{$Usuario->user_pf ?: '/assets/UsuarioPF/UPF.png'}}" class="block mx-auto w-35 h-35 rounded-md mt-5 border-2 border-[#4a7bb7] object-cover">
+                <div class="col-span-2 flex flex-col items-center mb-2">
+                    <label for="foto-edit-{{$Usuario->user_id}}" class="cursor-pointer text-blue-400 hover:underline">Selecionar foto de perfil</label>
+                    <input type="file" name="foto" id="foto-edit-{{$Usuario->user_id}}" accept="image/*" class="hidden">
+                </div>
                 <div class="grid gap-4 grid-cols-2 py-4 md:py-6">
                         
                     <div class="col-span-2">
@@ -339,6 +368,8 @@
 
 
 
+dsaasdas
+
 
 
 
@@ -362,7 +393,16 @@
                 @csrf
                 @method('post')
 
-                <img src="/assets/Logos/UserPF.png" class="block mx-auto w-35 h-35 rounded-md mt-5 border-2 border-[#4a7bb7]">
+                <img id="preview-edit-{{$Usuario->user_id}}" class="block mx-auto w-35 h-35 rounded-md mt-5 border-2 border-[#4a7bb7] object-cover"
+                     src="/assets/UsuarioPF/UPF.png" alt="Foto de Perfil">       
+                     <div class="col-span-2 flex flex-col items-center mb-2">
+                        <label for="foto-create-{{$Usuario->user_id}}" class="cursor-pointer text-blue-400 hover:underline">Selecionar foto de perfil</label>
+                        <input type="file" name="foto" id="foto-create-{{$Usuario->user_id}}" accept="image/*" class="hidden">
+                     </div>
+                
+              
+                     
+
                 <div class="grid gap-4 grid-cols-2 py-4 md:py-6">
                     <div class="col-span-2">
                         <label for="user_name" class="block mb-2.5 text-sm font-medium text-heading">Nome</label>
@@ -434,3 +474,34 @@
         </div>
     </div>
 </div> 
+
+
+
+
+<script>  // JS pras previews das fotos, não está na pasta js pra eu poder usar o foreach, depois eu otimizo isso
+
+
+                // Preview para criar usuario
+                const inputCreate = document.getElementById('foto-create');
+                if(inputCreate) {
+                    inputCreate.addEventListener('change', function(e) {
+                        const [file] = e.target.files;
+                        if(file) {
+                            document.getElementById('preview-create').src = URL.createObjectURL(file);
+                        }
+                    });
+                }
+
+                // Preview para editar usuario
+                @foreach ($users as $Usuario)
+                const inputEdit{{$Usuario->user_id}} = document.getElementById('foto-edit-{{$Usuario->user_id}}');
+                if(inputEdit{{$Usuario->user_id}}) {
+                    inputEdit{{$Usuario->user_id}}.addEventListener('change', function(e) {
+                        const [file] = e.target.files;
+                        if(file) {
+                            document.getElementById('preview-edit-{{$Usuario->user_id}}').src = URL.createObjectURL(file);
+                        }
+                    });
+                }
+                @endforeach
+</script>

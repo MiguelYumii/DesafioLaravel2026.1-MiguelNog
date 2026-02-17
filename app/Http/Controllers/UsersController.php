@@ -6,6 +6,7 @@ use App\Models\Usuario;
 use App\Models\Endereco;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\File;
 
 class UsersController extends Controller
 {
@@ -22,25 +23,28 @@ class UsersController extends Controller
     {
       
     
-        $nomeimagem = 'DefaultIcon.png';
+        $user_pf = null;
         if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
             $file = $request->file('foto');
             $nomeimagem = sha1(uniqid($file->getClientOriginalName(), true)) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('assets/imagemUsuario'), $nomeimagem);
+            $file->move(public_path('assets/UsuarioPF'), $nomeimagem);
+            $user_pf = 'assets/UsuarioPF/' . $nomeimagem;
         }
+        // a foto null deixa com as inicias, o blade faz isso já
 
+
+        
         $usuario = Usuario::create([
             'user_name' => $request->input('user_name'),
             'user_email' => $request->input('user_email'),
-            'user_password' => Hash::make($request->user_password), // Hash = criptografia da senha
+            'user_password' => Hash::make($request->user_password),
             'user_phone' => $request->input('user_phone'),
             'user_birthday' => $request->input('user_birthday'),
             'user_cpf' => $request->input('user_cpf'),
             'user_balance' => 0,
-            'user_pf' => 0,
+            'user_pf' => $user_pf,
             'user_adm' => 0,
-            'user_createdBy' => null,
-            'foto' => $nomeimagem
+            'user_createdBy' => null
         ]);
 
 
@@ -78,6 +82,7 @@ class UsersController extends Controller
         // parte pra deletar o endereço do usuario do banco, quando vc deleta o user
         Endereco::where('usuarios_user_id', $usuario->user_id)->delete();
         $usuario->delete();
+        File::delete($usuario->user_pf); 
         return redirect()->route('index')->with('success', 'Usuário deletado com sucesso!');
     }
 
@@ -98,9 +103,16 @@ class UsersController extends Controller
             'user_birthday' => $data['user_birthday'] ?? $user->user_birthday,
             'user_cpf'      => $data['user_cpf'] ?? $user->user_cpf,
             'user_balance'  => $user->user_balance,
-            'user_pf'       => $user->user_pf,
             'user_adm'      => $user->user_adm,
         ];
+
+        // Código pra salvar a fotto do perfil
+        if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
+            $file = $request->file('foto');
+            $nomeimagem = sha1(uniqid($file->getClientOriginalName(), true)) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('assets/UsuarioPF'), $nomeimagem);
+            $updateData['user_pf'] = 'assets/UsuarioPF/' . $nomeimagem;
+        }
         $user->update($updateData);
 
 
@@ -119,7 +131,7 @@ class UsersController extends Controller
 
     }
 
-    // ...existing code...
+  
 
 
 
