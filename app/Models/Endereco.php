@@ -2,22 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;   //deixar model pq só assim funcionou
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Endereco extends Authenticatable
+class Endereco extends Model 
 {
-    use Notifiable;
+    use HasFactory;
 
-    //conecta na tabela do endrereço
+   
     protected $table = 'endress';
 
-    protected $primaryKey = 'endress_id'; //chave primaira
+    
+    protected $primaryKey = 'endress_id';
 
-    //tira o timestamps, já que não tem a coluna create e uptade, colocar isso no breaking change dps
+    
     public $timestamps = false;
 
-    //colunas pro laravel preencher
+   
     protected $fillable = [
         'endress_photo',
         'endress_StreetNumber',
@@ -27,7 +28,12 @@ class Endereco extends Authenticatable
         'endress_City',
         'endress_Estado',
         'endress_cep',
-        'usuarios_user_id'
-
+        'usuarios_user_id' 
     ];
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'usuarios_user_id', 'id');
+    }
 }

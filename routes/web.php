@@ -27,6 +27,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -36,14 +38,23 @@ Route::middleware('auth')->group(function () {
 
 
 
+Route::middleware(['auth'])->group(function () {
+
+        // Modais do CRUD Usuario
+        Route::get('/users', [App\Http\Controllers\UsersController::class, 'index'])->name('index');
+        Route::post('/users', [App\Http\Controllers\UsersController::class, 'store'])->name('store');
+        Route::put('/users/{id}', [App\Http\Controllers\UsersController::class, 'update'])->name('update');
+        Route::delete('/users/{id}', [App\Http\Controllers\UsersController::class, 'destroy'])->name('destroy');
+        
+});
+
+    Route::get('/users/create', [App\Http\Controllers\UsersController::class, 'create'])->name('create');
 
 
-Route::get('/users', [App\Http\Controllers\UsersController::class, 'index'])->name('index');
-
-Route::get('/users/create', [App\Http\Controllers\UsersController::class, 'create'])->name('create');
-Route::post('/users', [App\Http\Controllers\UsersController::class, 'store'])->name('store');
-Route::put('/users/{id}', [App\Http\Controllers\UsersController::class, 'update'])->name('update');
-Route::delete('/users/{id}', [App\Http\Controllers\UsersController::class, 'destroy'])->name('destroy');
+//Login
+Route::post('/login', function () {
+    return 'Autenticação de Usuário';
+})->name('login');
 
 
 
