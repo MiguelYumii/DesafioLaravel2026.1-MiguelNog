@@ -48,6 +48,8 @@ class UsersController extends Controller
             'created_by' => $criadoPor,
             ]); 
 
+
+
         if ($request->filled('endress_StreetNumber') || $request->filled('endress_cep') || $request->filled('endress_StreetExtra')) {
             $cep = $request->input('endress_cep');
             $viaCepData = [];
@@ -75,6 +77,8 @@ class UsersController extends Controller
         return redirect()->route('index')->with('success', 'Usuário criado com sucesso!');
     }
 
+
+
     public function destroy($id)
     {
         $user = User::findOrFail($id);
@@ -88,6 +92,9 @@ class UsersController extends Controller
         return redirect()->route('index')->with('success', 'Usuário deletado com sucesso!');
     }
 
+
+
+    
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
