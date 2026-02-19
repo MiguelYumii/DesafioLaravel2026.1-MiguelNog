@@ -20,6 +20,7 @@ class UsersController extends Controller
     }
     
 
+    //criar
     public function store(Request $request)
     {
         $user_pf = '';
@@ -30,9 +31,6 @@ class UsersController extends Controller
             $file->move(public_path('assets/UsuarioPF'), $nomeimagem);
             $user_pf = 'assets/UsuarioPF/' . $nomeimagem;
         }
-
-        
-        $criadoPor = Auth::check() ? Auth::id() : 0;
 
         // forcecreate por conta do erro do adm, resolver isso depois na integração
         $user = User::forceCreate([
@@ -45,7 +43,7 @@ class UsersController extends Controller
             'balance' => 0,
             'userpf' => $user_pf,
             'adm' => 0,
-            'created_by' => $criadoPor,
+            
             ]); 
 
 
@@ -78,7 +76,7 @@ class UsersController extends Controller
     }
 
 
-
+    //apagar
     public function destroy($id)
     {
         $user = User::findOrFail($id);
@@ -94,11 +92,14 @@ class UsersController extends Controller
 
 
 
-    
+    //editar
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
         $data = $request->all();
+
+        
+
 
         $updateData = [
             'name'     => $data['user_name'] ?? $user->name,
@@ -123,16 +124,31 @@ class UsersController extends Controller
             $updateData['userpf'] = 'assets/UsuarioPF/' . $nomeimagem;
         }
         
-        $user->update($updateData);
+        $user->forceFill($updateData)->save();
 
         $endereco = Endereco::where('usuarios_user_id', $user->id)->first();
         if ($endereco) {
             $enderecoData = [
-                'endress_StreetNumber' => $data['numerocasa']  ?? $endereco->endress_StreetNumber,
-                'endress_cep'          => $data['cep']         ?? $endereco->endress_cep,
-                'endress_StreetExtra'  => $data['complemento'] ?? $endereco->endress_StreetExtra,
+                'endress_StreetNumber' => $data['endress_StreetNumber'] ?? $endereco->endress_StreetNumber,
+                'endress_cep'          => $data['endress_cep']          ?? $endereco->endress_cep,
+                'endress_StreetExtra'  => $data['endress_StreetExtra']  ?? $endereco->endress_StreetExtra,
             ];
-            $endereco->update($enderecoData);
+
+            if (!empty($data['endress_cep'])) {
+                $cep = preg_replace('/[^0-9]/', '', $data['endress_cep']);
+                $response = @file_get_contents("https://viacep.com.br/ws/{$cep}/json/");
+                if ($response !== false) {
+                    $viaCepData = json_decode($response, true);
+                    if (!isset($viaCepData['erro'])) {
+                        $enderecoData['endress_Bairro'] = $viaCepData['bairro'] ?? $endereco->endress_Bairro;
+                        $enderecoData['endress_street'] = $viaCepData['logradouro'] ?? $endereco->endress_street;
+                        $enderecoData['endress_Estado'] = $viaCepData['uf'] ?? $endereco->endress_Estado;
+                        $enderecoData['endress_City'] = $viaCepData['localidade'] ?? $endereco->endress_City;
+                    }
+                }
+            }
+
+            $endereco->forceFill($enderecoData)->save();
         }
         
         return redirect()->route('index');

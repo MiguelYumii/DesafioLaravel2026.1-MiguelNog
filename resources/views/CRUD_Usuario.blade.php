@@ -15,20 +15,19 @@
 
 
 
-        <div class="bg-[#1a1a1a] min-h-screen w-full font-sans text-white p-4">
-            <div class="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
+        <div class="bg-[#031221] min-h-screen w-full font-sans text-white p-4">
+            <div class="relative overflow-x-auto bg-slate-800 shadow-xs rounded-base border border-default">
                 <table class="w-full text-sm text-left rtl:text-right text-body">
 
-                    <thead class="bg-neutral-secondary-soft border-b border-default">
+                    <thead class="text-white text-center  bg-[#031536] border-b border-default">
                         <tr>
                             <th scope="col" class="px-6 py-3 font-medium"> ID</th>
                             <th scope="col" class="px-6 py-3 font-medium"> Foto </th>
                             <th scope="col" class="px-6 py-3 font-medium"> Nome </th>
                             <th scope="col" class="px-6 py-3 font-medium"> Email </th>
                             <th scope="col" class="px-6 py-3 font-medium"> Cargo </th>
-                            <th scope="col" class="px-6 py-3 font-medium flex items-center justify-center"> Ação 
-                                 <button  data-modal-target="criar-modal" data-modal-toggle="criar-modal" class="px-6 py-3 font-medium flex items-center justify-center "> Criar Usuário </button>
-                                
+                            <th scope="col" class="px-6 py-3 font-medium flex items-center justify-center"> 
+                                 <button  data-modal-target="criar-modal" data-modal-toggle="criar-modal" class="px-6 py-3 font-medium flex items-center justify-center hover:text-[#058C42]"> Criar Usuário </button>
                             </th>
                         </tr>
                     </thead>
@@ -38,34 +37,37 @@
                     <tbody>
                       
                         @foreach ($users as $User)
-                        <tr class="odd:bg-neutral-primary even:bg-neutral-secondary-soft border-b border-default  ">
-                            <th class="px-6 py-4" > {{$User->id}} </th>
-                            <td class="px-6 py-4">
+                        <tr class="odd:bg-[#053058] even:bg-[#03223F] border-b border-default  text-center ">
+                           
+                            <th class="text-white px-6 py-4" > {{$User->id}} </th>
+
+                            <td class="text-white px-6 py-4">
                                 @if($User->userpf && !empty($User->userpf))
-                                    <img src="{{$User->userpf}}" class="w-14 h-14 rounded-full border-2 border-[#4a7bb7] object-cover">
+                                    <img src="{{$User->userpf}}" class="block mx-auto w-14 h-14 rounded-full border-2 border-[#4a7bb7] object-cover">
                                 @else
-                                    <div class="w-14 h-14 rounded-full border-2 border-[#4a7bb7] bg-blue-700 flex items-center justify-center text-white text-xl font-bold">
+                                    <div class="mx-auto w-14 h-14 rounded-full object-cover border-2 border-[#4a7bb7] bg-blue-700 flex items-center justify-center text-white text-xl font-bold">
                                         {{ strtoupper(substr($User->name,0,2)) }}
                                     </div>
                                 @endif
                             </td>
-                            <td class="px-6 py-4"> {{$User->name}} </td>
-                            <td class="px-6 py-4"> {{$User->email}} </td>
 
-                            <td class="px-6 py-4">
+                            <td class="text-white px-6 py-4 text-center"> {{$User->name}} </td>
+                            <td class="text-white  px-6 py-4 text-center"> {{$User->email}} </td>
+
+                            <td class="text-white px-6 py-4 text-center">
                                 @if($User->adm == 1)  
-                                    <p class="text-green-600">Administrador</p>
+                                    <p class=" text-green-600">Administrador</p>
                                 @else
                                     Usuário
                                 @endif
                             </td>
                       
                             <td class="px-6 py-4">
-                                <div class="flex items-center justify-center gap-7">
+                                <div class="text-white flex items-center justify-center gap-7">
                                 @if(auth()->user()->adm == 1 || auth()->user()->id == $User->id)
-                                    <button data-modal-target="ver-modal-{{$User->id}}" data-modal-toggle="ver-modal-{{$User->id}}" class="font-medium text-fg-brand hover:underline">Ver</button>
-                                    <button data-modal-target="editar-modal-{{$User->id}}" data-modal-toggle="editar-modal-{{$User->id}}" class="font-medium text-fg-brand hover:underline">Editar</button>
-                                    <button data-modal-target="popup-modal-{{$User->id}}" data-modal-toggle="popup-modal-{{$User->id}}" class="font-medium text-fg-brand hover:underline">Excluir</button>
+                                    <button data-modal-target="ver-modal-{{$User->id}}" data-modal-toggle="ver-modal-{{$User->id}}" class="font-medium text-fg-brand  hover:text-[#058C42] hover:underline">Ver</button>
+                                    <button data-modal-target="editar-modal-{{$User->id}}" data-modal-toggle="editar-modal-{{$User->id}}" class="font-medium text-fg-brand hover:text-[#f2ff38] hover:underline">Editar</button>
+                                    <button data-modal-target="popup-modal-{{$User->id}}" data-modal-toggle="popup-modal-{{$User->id}}" class="font-medium text-fg-brand hover:text-[#bd0f0f] hover:underline">Excluir</button>
                                 @else
                                     <span class="text-gray-400 italic">Sem Acesso</span>
                                  @endif
@@ -80,7 +82,7 @@
                     
                 </table>
 
-                <div class="py-4">
+                <div class="py-4 bg-[#031536]">
                     {{ $users->links() }}
                 </div>
 
@@ -95,10 +97,8 @@
 
 
 
-
-
-  @foreach ($users as $user)       
-<!-- MODAL VER USUÁRIO -->
+  @foreach ($users as $user)   
+  <!-- MODAL VER USUÁRIO -->    
 <div id="ver-modal-{{$user->id}}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-md max-h-full">
         <div class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
@@ -237,8 +237,7 @@
 
 
 <!-- MODAL DE EXCLUIR USUÁRIO -->
-
-    <form action="{{route('destroy',$user->id)}}" method="POST" style="display:inline;">
+<form action="{{route('destroy',$user->id)}}" method="POST" style="display:inline;">
     @csrf
     @method('delete')
 
@@ -263,6 +262,7 @@
                 </div>
             </div>
         </div>
+
 
 <!-- ========================== -->
 
@@ -292,10 +292,10 @@
                 @csrf
                 @method('put')
 
-                <img id="preview-edit-{{$user->id}}" src="{{$user->user_pf ?: '/assets/UsuarioPF/UPF.png'}}" class="block mx-auto w-35 h-35 rounded-md mt-5 border-2 border-[#4a7bb7] object-cover">
+                <img id="preview-edit-{{$user->id}}" src="{{$user->userpf ?: '/assets/UsuarioPF/UPF.png'}}" class="block mx-auto w-35 h-35 rounded-md mt-5 border-2 border-[#4a7bb7] object-cover">
                 <div class="col-span-2 flex flex-col items-center mb-2">
                     <label for="foto-edit-{{$user->id}}" class="cursor-pointer text-blue-400 hover:underline">Selecionar foto de perfil</label>
-                    <input type="file" name="foto" id="foto-edit-{{$user->id}}" accept="image/*" class="hidden">
+                    <input type="file" name="foto" id="foto-edit-{{$user->id}}" accept="image/*" class="hidden" onchange="if(this.files[0]) document.getElementById('preview-edit-{{$user->id}}').src = window.URL.createObjectURL(this.files[0])">
                 </div>
                 <div class="grid gap-4 grid-cols-2 py-4 md:py-6">
                         
@@ -314,31 +314,29 @@
                         <input type="password" name="user_password" id="user_password" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs" >
                     </div>
 
+                    @php
+                        $enderecoUsuario = $enderecos->firstWhere('usuarios_user_id', $user->id);
+                    @endphp
 
                     <div class="col-span-2 sm:col-span-1">
                         <label for="endress_cep" class="block mb-2.5 text-sm font-medium text-heading">Cep</label>
-                        <input type="number" name="endress_cep" id="endress_cep"  class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs" >
+                        <input type="number" name="endress_cep" id="endress_cep" value="{{ $enderecoUsuario->endress_cep ?? '' }}" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs" >
                     </div>
+                    
                     <div class="col-span-2 sm:col-span-1">
                         <label for="endress_StreetNumber" class="block mb-2.5 text-sm font-medium text-heading">Número da Residência</label>
-                        <input type="number" name="endress_StreetNumber" id="endress_StreetNumber"  class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs">
+                        <input type="number" name="endress_StreetNumber" id="endress_StreetNumber" value="{{ $enderecoUsuario->endress_StreetNumber ?? '' }}" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs">
                     </div>
-
-
 
                     <div class="col-span-2">
                         <label for="endress_StreetExtra" class="block mb-2.5 text-sm font-medium text-heading">Complemento</label>
-                        <input type="text" name="endress_StreetExtra" id="endress_StreetExtra"  class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" >
+                        <input type="text" name="endress_StreetExtra" id="endress_StreetExtra" value="{{ $enderecoUsuario->endress_StreetExtra ?? '' }}" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" >
                     </div>
                 
                     <div class="col-span-2">
                         <label class="block mb-2.5 text-sm font-medium text-heading">CPF</label>
                         <input type="text" name="user_cpf" id="user_cpf" value="{{$user->cpf}}" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body">
-                        </div>
                     </div>
-
-
-
 
                     <div class="col-span-2 sm:col-span-1">
                         <label for="user_phone" class="block mb-2.5 text-sm font-medium text-heading">Número de Telefone</label>
@@ -350,34 +348,22 @@
                     </div>
                    
                     
-                        <div class="flex items-center space-x-4 border-t border-default pt-4 md:pt-6">
+                        <div class="flex items-center space-x-4 border-t border-default pt-4 md:pt-6 col-span-2 mt-4">
                             <button type="submit" class="inline-flex items-center  text-white bg-green-700 hover:bg-green-800 box-border border border-transparent focus:ring-4 focus:ring-green-300 shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
                                 <svg class="w-4 h-4 me-1.5 -ms-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/></svg>
                                 Confirmar alterações
                             </button>
                             <button data-modal-hide="editar-modal-{{$user->id}}" type="button" class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">Cancelar</button>
                         </div>
-                
-                
-                
-                
                 </div>
-
-
 
             </form>
         </div>
     </div>
 </div> 
-
 <!-- =============================== -->
 
 @endforeach
-
-
-
-
-
 
 
 
@@ -402,11 +388,11 @@
                 @csrf
                 @method('post')
 
-                <img id="preview-edit-{{$user->id}}" class="block mx-auto w-35 h-35 rounded-md mt-5 border-2 border-[#4a7bb7] object-cover"
+                <img id="preview-create" class="block mx-auto w-35 h-35 rounded-md mt-5 border-2 border-[#4a7bb7] object-cover"
                      src="/assets/UsuarioPF/UPF.png" alt="Foto de Perfil">       
                      <div class="col-span-2 flex flex-col items-center mb-2">
-                        <label for="foto-create-{{$user->id}}" class="cursor-pointer text-blue-400 hover:underline">Selecionar foto de perfil</label>
-                        <input type="file" name="foto" id="foto-create-{{$user->id}}" accept="image/*" class="hidden">
+                        <label for="foto-create" class="cursor-pointer text-blue-400 hover:underline">Selecionar foto de perfil</label>
+                        <input type="file" name="foto" id="foto-create" accept="image/*" class="hidden">
                      </div>
                 
               
@@ -447,18 +433,18 @@
                 
                     <div class="col-span-2">
                         <label for="user_cpf" class="block mb-2.5 text-sm font-medium text-heading">CPF</label>
-                        <input type="text" name="user_cpf" id="user_cpf" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs"  required>
+                        <input type="text" name="user_cpf" id="user_cpf" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus-border-brand block w-full px-3 py-2.5 shadow-xs"  required>
                         </div>
                     </div>
 
 
                     <div class="col-span-2 sm:col-span-1">
                         <label for="user_phone" class="block mb-2.5 text-sm font-medium text-heading">Número de Telefone</label>
-                        <input type="number" name="user_phone" id="user_phone" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs" required >
+                        <input type="number" name="user_phone" id="user_phone" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus-border-brand block w-full px-3 py-2.5 shadow-xs" required >
                     </div>
                     <div class="col-span-2 sm:col-span-1">
                         <label for="user_birthday" class="block mb-2.5 text-sm font-medium text-heading">Data de Nascimento</label>
-                        <input type="date" name="user_birthday" id="user_birthday" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs" required>
+                        <input type="date" name="user_birthday" id="user_birthday" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus-border-brand block w-full px-3 py-2.5 shadow-xs" required>
                     </div>
                    
                 
@@ -503,12 +489,12 @@
 
                 // Preview para editar usuario
                 @foreach ($users as $Usuario)
-                const inputEdit{{$user->id}} = document.getElementById('foto-edit-{{$user->id}}');
-                if(inputEdit{{$user->id}}) {
-                    inputEdit{{$user->id}}.addEventListener('change', function(e) {
+                const inputEdit{{$Usuario->id}} = document.getElementById('foto-edit-{{$Usuario->id}}');
+                if(inputEdit{{$Usuario->id}}) {
+                    inputEdit{{$Usuario->id}}.addEventListener('change', function(e) {
                         const [file] = e.target.files;
                         if(file) {
-                            document.getElementById('preview-edit-{{$user->id}}').src = URL.createObjectURL(file);
+                            document.getElementById('preview-edit-{{$Usuario->id}}').src = URL.createObjectURL(file);
                         }
                     });
                 }
