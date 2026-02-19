@@ -14,94 +14,150 @@
 
 
 
-
         <div class="bg-[#031221] min-h-screen w-full font-sans text-white p-4">
-            <div class="relative overflow-x-auto bg-slate-800 shadow-xs rounded-base border border-default">
-                <table class="w-full text-sm text-left rtl:text-right text-body">
+            <div class="max-w-7xl mx-auto">
+                
 
-                    <thead class="text-white text-center  bg-slate-900 border-b border-default">
-                        <tr>
-                            <th scope="col" class="px-6 py-3 font-medium"> ID</th>
-                            <th scope="col" class="px-6 py-3 font-medium"> Foto </th>
-                            <th scope="col" class="px-6 py-3 font-medium"> Nome </th>
-                            <th scope="col" class="px-6 py-3 font-medium"> Email </th>
-                            <th scope="col" class="px-6 py-3 font-medium"> Cargo </th>
-                            <th scope="col" class="px-6 py-3 font-medium flex items-center justify-center"> 
-                                 <button  data-modal-target="criar-modal" data-modal-toggle="criar-modal" class="px-6 py-3 font-medium flex items-center justify-center hover:text-[#058C42]"> Criar Usuário </button>
-                            </th>
-                        </tr>
-                    </thead>
+                <!-- Head da Tabela e Botão de CRIAR-->
+                <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 bg-slate-800 p-4 rounded-lg border border-slate-700 shadow-md">
+                    <h2 class="text-xl font-bold text-white">Gerenciamento de Usuários</h2>
+                    <button data-modal-target="criar-modal" data-modal-toggle="criar-modal" class="bg-[#058C42] hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-medium flex items-center justify-center transition-colors shadow-sm">
+                        + Criar Usuário
+                    </button>
+                </div>
+                <!--=================================-->
 
 
-
-                    <tbody>
-                      
-                        @foreach ($users as $User)
-                        <tr class="bg-slate-800 even:bg-[#03223F] border-b border-default  text-center ">
-                           
-                            <th class="text-white px-6 py-4" > {{$User->id}} </th>
-
-                            <td class="text-white px-6 py-4">
-                                @if($User->userpf && !empty($User->userpf))
-                                    <img src="{{$User->userpf}}" class="block mx-auto w-14 h-14 rounded-full border-2 border-[#4a7bb7] object-cover">
-                                @else
-                                    <div class="mx-auto w-14 h-14 rounded-full object-cover border-2 border-[#4a7bb7] bg-blue-700 flex items-center justify-center text-white text-xl font-bold">
-                                        {{ strtoupper(substr($User->name,0,2)) }}
+                <!-- Tabela de Usuários do COMPUTADOR-->
+                <div class="hidden lg:block relative overflow-x-auto bg-slate-800 shadow-xs rounded-lg border border-slate-700">
+                    <table class="w-full text-sm text-left rtl:text-right text-body">
+                        <thead class="text-white text-center bg-slate-900 border-b border-slate-700">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 font-medium"> ID</th>
+                                <th scope="col" class="px-6 py-3 font-medium"> Foto </th>
+                                <th scope="col" class="px-6 py-3 font-medium"> Nome </th>
+                                <th scope="col" class="px-6 py-3 font-medium"> Email </th>
+                                <th scope="col" class="px-6 py-3 font-medium"> Cargo </th>
+                                <th scope="col" class="px-6 py-3 font-medium"> Ações </th>
+                            </tr>
+                        </thead>
+                <!------------------------------------->  
+                        <tbody>
+                            @foreach ($users as $User)
+                            <tr class="bg-slate-800 even:bg-[#03223F] border-b border-slate-700 text-center hover:bg-slate-700/50 transition-colors">
+                                <th class="text-white px-6 py-4" > {{$User->id}} </th>
+                                <td class="text-white px-6 py-4">
+                                    @if($User->userpf && !empty($User->userpf))
+                                        <img src="{{$User->userpf}}" class="block mx-auto w-14 h-14 rounded-full border-2 border-[#4a7bb7] object-cover">
+                                    @else
+                                        <div class="mx-auto w-14 h-14 rounded-full object-cover border-2 border-[#4a7bb7] bg-blue-700 flex items-center justify-center text-white text-xl font-bold">
+                                            {{ strtoupper(substr($User->name,0,2)) }}
+                                        </div>
+                                    @endif
+                                </td>
+                                <td class="text-white px-6 py-4 text-center"> {{$User->name}} </td>
+                                <td class="text-white px-6 py-4 text-center"> {{$User->email}} </td>
+                                <td class="text-white px-6 py-4 text-center">
+                                    @if($User->adm == 1)  
+                                        <span class="text-green-500 font-medium">Administrador</span>
+                                    @else
+                                        <span class="text-gray-300">Usuário</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-white flex items-center justify-center gap-5">
+                                    @if(auth()->user()->adm == 1 || auth()->user()->id == $User->id)
+                                        <button data-modal-target="ver-modal-{{$User->id}}" data-modal-toggle="ver-modal-{{$User->id}}" class="font-medium text-[#058C42] hover:text-green-400 hover:underline">Ver</button>
+                                        <button data-modal-target="editar-modal-{{$User->id}}" data-modal-toggle="editar-modal-{{$User->id}}" class="font-medium text-[#f2ff38] hover:text-yellow-300 hover:underline">Editar</button>
+                                        <button data-modal-target="popup-modal-{{$User->id}}" data-modal-toggle="popup-modal-{{$User->id}}" class="font-medium text-[#bd0f0f] hover:text-red-400 hover:underline">Excluir</button>
+                                    @else
+                                        <span class="text-gray-500 italic">Sem Acesso</span>
+                                     @endif
                                     </div>
-                                @endif
-                            </td>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <!--=================================-->
 
-                            <td class="text-white px-6 py-4 text-center"> {{$User->name}} </td>
-                            <td class="text-white  px-6 py-4 text-center"> {{$User->email}} </td>
 
-                            <td class="text-white px-6 py-4 text-center">
-                                @if($User->adm == 1)  
-                                    <p class=" text-green-600">Administrador</p>
-                                @else
-                                    Usuário
-                                @endif
-                            </td>
-                      
-                            <td class="px-6 py-4">
-                                <div class="text-white flex items-center justify-center gap-7">
-                                @if(auth()->user()->adm == 1 || auth()->user()->id == $User->id)
-                                    <button data-modal-target="ver-modal-{{$User->id}}" data-modal-toggle="ver-modal-{{$User->id}}" class="font-medium text-fg-brand  hover:text-[#058C42] hover:underline">Ver</button>
-                                    <button data-modal-target="editar-modal-{{$User->id}}" data-modal-toggle="editar-modal-{{$User->id}}" class="font-medium text-fg-brand hover:text-[#f2ff38] hover:underline">Editar</button>
-                                    <button data-modal-target="popup-modal-{{$User->id}}" data-modal-toggle="popup-modal-{{$User->id}}" class="font-medium text-fg-brand hover:text-[#bd0f0f] hover:underline">Excluir</button>
-                                @else
-                                    <span class="text-gray-400 italic">Sem Acesso</span>
-                                 @endif
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="odd:bg-neutral-primary even:bg-neutral-secondary-soft border-b border-default">
-                          @endforeach
+
+                <!-- Responsividade CELULAR e TABLET -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:hidden">
+                    @foreach ($users as $User)
+                    <div class="bg-slate-800 rounded-xl shadow-lg border border-slate-700 p-5 flex flex-col items-center relative w-full max-w-md mx-auto hover:border-[#4a7bb7] transition-colors">
                         
+                        <span class="absolute top-3 left-3 bg-slate-900 text-gray-400 text-xs font-bold px-2 py-1 rounded">
+                            ID: {{$User->id}}
+                        </span>
 
-                    </tbody>
-                    
-                </table>
+                        <div class="mt-4 mb-3">
+                            @if($User->userpf && !empty($User->userpf))
+                                <img src="{{$User->userpf}}" class="w-20 h-20 rounded-full border-2 border-[#4a7bb7] object-cover shadow-md">
+                            @else
+                                <div class="w-20 h-20 rounded-full border-2 border-[#4a7bb7] bg-blue-700 flex items-center justify-center text-white text-2xl font-bold shadow-md">
+                                    {{ strtoupper(substr($User->name,0,2)) }}
+                                </div>
+                            @endif
+                        </div>
 
-                <div class="py-4 bg-slate-900">
+                        <h3 class="text-lg font-semibold text-white text-center w-full truncate px-2" title="{{$User->name}}">
+                            {{$User->name}}
+                        </h3>
+                        <p class="text-sm text-gray-400 text-center w-full truncate mb-3" title="{{$User->email}}">
+                            {{$User->email}}
+                        </p>
+
+                        <div class="mb-5">
+                            @if($User->adm == 1)  
+                                <span class="bg-green-900/30 text-green-500 border border-green-800 text-xs px-3 py-1 rounded-full font-medium">Administrador</span>
+                            @else
+                                <span class="bg-slate-700 text-gray-300 border border-slate-600 text-xs px-3 py-1 rounded-full font-medium">Usuário</span>
+                            @endif
+                        </div>
+
+                        <div class="mt-auto w-full pt-4 border-t border-slate-700/80">
+                            <div class="flex items-center justify-center gap-4">
+                                @if(auth()->user()->adm == 1 || auth()->user()->id == $User->id)
+                                    <button data-modal-target="ver-modal-{{$User->id}}" data-modal-toggle="ver-modal-{{$User->id}}" class="font-medium text-[#058C42] hover:text-green-400 hover:underline transition-colors">Ver</button>
+                                    <button data-modal-target="editar-modal-{{$User->id}}" data-modal-toggle="editar-modal-{{$User->id}}" class="font-medium text-[#f2ff38] hover:text-yellow-300 hover:underline transition-colors">Editar</button>
+                                    <button data-modal-target="popup-modal-{{$User->id}}" data-modal-toggle="popup-modal-{{$User->id}}" class="font-medium text-[#bd0f0f] hover:text-red-400 hover:underline transition-colors">Excluir</button>
+                                @else
+                                    <span class="text-gray-500 italic text-sm">Sem Acesso</span>
+                                @endif
+                            </div>
+                        </div>
+
+                    </div>
+                    @endforeach
+                </div>
+                <!--=================================-->
+
+
+
+                <div class="mt-6 py-4 bg-slate-900 rounded-lg shadow-sm border border-slate-700 px-4 overflow-x-auto">
                     {{ $users->links() }}
 
-                
-                <!-- css da paginação -->    
-               <style>
-                    nav[role="navigation"] a, nav[role="navigation"] span { background-color: #03223F !important; color: white !important; border-color: #4a7bb7 !important; }
-                    nav[role="navigation"] span[aria-current="page"] { background-color: #058C42 !important; color: white !important; }
-                </style>
-
-
+                    <style>
+                        nav[role="navigation"] a, nav[role="navigation"] span { background-color: #03223F !important; color: white !important; border-color: #4a7bb7 !important; }
+                        nav[role="navigation"] span[aria-current="page"] { background-color: #058C42 !important; color: white !important; }
+                    </style>
                 </div>
 
             </div>
         </div>
 
+        
 
 
 
 
+
+
+
+        
   @foreach ($users as $user)   
   <!-- MODAL VER USUÁRIO -->    
     <div id="ver-modal-{{$user->id}}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
