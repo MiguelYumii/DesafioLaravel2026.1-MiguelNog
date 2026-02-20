@@ -13,8 +13,6 @@ use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use App\Models\Endereco;
 
-
-
 class RegisteredUserController extends Controller
 {
     /**
@@ -30,9 +28,7 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-
-
-public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $user_pf = '';
 
@@ -42,8 +38,6 @@ public function store(Request $request): RedirectResponse
             $file->move(public_path('assets/UsuarioPF'), $nomeimagem);
             $user_pf = 'assets/UsuarioPF/' . $nomeimagem;
         }
-
-        
 
         // forcecreate por conta do erro do adm, resolver isso depois na integração
         $user = User::forceCreate([
@@ -56,8 +50,11 @@ public function store(Request $request): RedirectResponse
             'balance' => 0,
             'userpf' => $user_pf,
             'adm' => 0,
-            
-            ]); 
+            'createdBy' => 0, // Valor temporário
+        ]); 
+
+
+        $user->forceFill(['createdBy' => $user->id])->save();
 
         if ($request->filled('endress_StreetNumber') || $request->filled('endress_cep') || $request->filled('endress_StreetExtra')) {
             $cep = $request->input('endress_cep');
@@ -83,13 +80,10 @@ public function store(Request $request): RedirectResponse
             ]);
         }
 
-
-                event(new Registered($user));
+        event(new Registered($user));
 
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
-
-
     }
 }

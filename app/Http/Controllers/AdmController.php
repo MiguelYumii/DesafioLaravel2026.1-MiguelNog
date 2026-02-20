@@ -9,14 +9,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth; 
 
-class UsersController extends Controller
+class AdmController extends Controller
 {
     public function index()  
     {
         $users = User::all();
-        $users = \App\Models\User::paginate(50);
-        $enderecos = Endereco::all();
-        return view('CRUD_Usuario', compact('users', 'enderecos')); 
+        $users = User::where('adm', 1)->paginate(50);        $enderecos = Endereco::all();
+        return view('CRUD_Adm', compact('users', 'enderecos')); 
     }
     
 
@@ -42,7 +41,7 @@ class UsersController extends Controller
             'cpf' => $request->input('user_cpf'),
             'balance' => 0,
             'userpf' => $user_pf,
-            'adm' => 0,
+            'adm' => 1,
             'createdBy' => Auth::id() ?? 0,
             ]); 
 

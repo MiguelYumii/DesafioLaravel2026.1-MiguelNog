@@ -20,6 +20,10 @@ Route::get('/Navbar', function () {
 use App\Http\Controllers\UsersController;
 Route::get('/CRUD_Usuario', [UsersController::class, 'index']);
 
+use App\Http\Controllers\AdmController;
+Route::get('/CRUD_Adm', [AdmController::class, 'index']);
+
+
 
 
 
@@ -40,15 +44,23 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
 
-        // Modais do CRUD Usuario
+        // Rotas do CRUD Usuario Comum
         Route::get('/users', [App\Http\Controllers\UsersController::class, 'index'])->name('index');
         Route::post('/users', [App\Http\Controllers\UsersController::class, 'store'])->name('store');
         Route::put('/users/{id}', [App\Http\Controllers\UsersController::class, 'update'])->name('update');
         Route::delete('/users/{id}', [App\Http\Controllers\UsersController::class, 'destroy'])->name('destroy');
+        Route::get('/users/create', [App\Http\Controllers\UsersController::class, 'create'])->name('create');
         
+        // ==== ADICIONE ESTA PARTE PARA O AdmController ====
+        Route::get('/admin/users', [App\Http\Controllers\AdmController::class, 'index'])->name('adm.index');
+        Route::post('/admin/users', [App\Http\Controllers\AdmController::class, 'store'])->name('adm.store');
+        Route::put('/admin/users/{id}', [App\Http\Controllers\AdmController::class, 'update'])->name('adm.update');
+        Route::delete('/admin/users/{id}', [App\Http\Controllers\AdmController::class, 'destroy'])->name('adm.destroy');
+        // ==================================================
 });
 
-    Route::get('/users/create', [App\Http\Controllers\UsersController::class, 'create'])->name('create');
+
+
 
 
 //Login
