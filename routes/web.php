@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\AdmController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,10 +19,7 @@ Route::get('/Navbar', function () {
 });
     
 
-use App\Http\Controllers\UsersController;
 Route::get('/CRUD_Usuario', [UsersController::class, 'index']);
-
-use App\Http\Controllers\AdmController;
 Route::get('/CRUD_Adm', [AdmController::class, 'index']);
 
 
@@ -51,7 +50,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/users/{id}', [App\Http\Controllers\UsersController::class, 'destroy'])->name('destroy');
         Route::get('/users/create', [App\Http\Controllers\UsersController::class, 'create'])->name('create');
         
-        // ==== ADICIONE ESTA PARTE PARA O AdmController ====
+
+
+
+        // Rotas do CRUD  Admin
         Route::get('/admin/users', [App\Http\Controllers\AdmController::class, 'index'])->name('adm.index');
         Route::post('/admin/users', [App\Http\Controllers\AdmController::class, 'store'])->name('adm.store');
         Route::put('/admin/users/{id}', [App\Http\Controllers\AdmController::class, 'update'])->name('adm.update');
