@@ -22,7 +22,7 @@ Route::get('/Navbar', function () {
     
 
 Route::get('/CRUD_Usuario', [UsersController::class, 'index']);
-Route::get('/CRUD_Adm', [UsersController::class, 'index']);
+Route::get('/CRUD_Adm', [AdmController::class, 'index']);
 Route::get('/CRUD_Produtos', [ProductController::class, 'index']);
 
 
