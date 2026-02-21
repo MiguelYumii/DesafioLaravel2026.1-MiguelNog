@@ -12,6 +12,10 @@
 
 </head>
 
+<header>
+    @include('Navbar')
+</header>
+
 
 
         <div class="bg-[#031221] min-h-screen w-full font-sans text-white p-4">

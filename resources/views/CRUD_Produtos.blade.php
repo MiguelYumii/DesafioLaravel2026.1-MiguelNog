@@ -13,10 +13,16 @@
 </head>
 
 
-<body class="bg-[#031221] min-h-screen w-full font-sans text-white p-4">
+<header>
+    @include('Navbar')
+</header>
+
+
+
+<body class="bg-[#031221] min-h-screen w-full font-sans text-white m-0 p-0 block">
 
     <!-- Header -->
-    <div class="max-w-7xl mx-auto">
+    <div class="max-w-7xl mx-auto mt-10">
         
         <!--Botão de CRIAR -->
         <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 bg-slate-800 p-4 rounded-lg border border-slate-700 shadow-md">
@@ -43,7 +49,7 @@
                         <th scope="col" class="px-6 py-3 font-medium"> Foto </th>
                         <th scope="col" class="px-6 py-3 font-medium"> Nome </th>
                         <th scope="col" class="px-6 py-3 font-medium"> Categoria </th>
-                        <th scope="col" class="px-6 py-3 font-medium"> Autor </th>
+                        <th scope="col" class="px-6 py-3 font-medium"> ID do Autor </th>
                         <th scope="col" class="px-6 py-3 font-medium"> Ações </th>
                     </tr>
                 </thead>
@@ -339,7 +345,7 @@
 
                     <div class="flex flex-col items-center mb-2">
                         <label for="foto-create" class="cursor-pointer text-blue-400 hover:underline">Selecionar foto do Produto</label>
-                        <input type="file" name="foto" id="foto-create" accept="image/*" class="hidden">
+                        <input type="file" name="foto" id="foto-create" accept="image/*" class="hidden" required>
                     </div>
 
                     <div>

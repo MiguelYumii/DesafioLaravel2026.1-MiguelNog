@@ -12,10 +12,16 @@
 
 </head>
 
+<header>
+    @include('Navbar')
+</header>
 
 
-        <div class="bg-[#031221] min-h-screen w-full font-sans text-white p-4">
-            <div class="max-w-7xl mx-auto">
+
+
+
+        <body class="bg-[#031221] min-h-screen w-full font-sans text-white m-0 p-0block">
+            <div class="max-w-7xl  mt-10  mx-auto">
                 
 
                 <!-- Head da Tabela e Botão de CRIAR-->
@@ -150,7 +156,7 @@
                 </div>
 
             </div>
-        </div>
+        </body>
 
         
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth; 
@@ -10,12 +11,25 @@ use Illuminate\Support\Facades\Auth;
 class ProductController extends Controller
 {
 
-    public function index()  
+    public function inicio() 
+    {
+        $user = Auth::user();
+        $users = User::all();
+        $products = Product::paginate(12); 
+        return view('Pagina_Inicial', compact('products', 'user', 'users')); 
+    }
+
+
+
+
+
+    public function index()  // CRUD Produtos
     {
         $products = Product::all();
         $products = \App\Models\Product::paginate(50);
         
         return view('CRUD_Produtos', compact('products')); 
+        
     }
     
 

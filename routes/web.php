@@ -12,13 +12,13 @@ Route::get('/', function () {
 });
 
 
-Route::get('/Pagina_Inicial', function () {
-    return view('Pagina_Inicial'); 
-});
-    
-Route::get('/Navbar', function () {
-    return view('Navbar'); 
-});
+Route::get('/Pagina_Inicial', [ProductController::class, 'inicio']);
+
+
+Route::get('/Navbar', [UsersController::class, 'navbar']);
+
+
+
     
 
 Route::get('/CRUD_Usuario', [UsersController::class, 'index']);

@@ -11,6 +11,19 @@ use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
+    public function navbar()  
+    {
+        $users = User::all();
+        return view('Navbar', compact('users')); 
+    }
+
+    public function paginaInicial()  
+    {
+        $users = User::all();
+        return view('Pagina_Inicial', compact('users')); 
+    }
+
+
     public function index()  
     {
         $users = User::all();

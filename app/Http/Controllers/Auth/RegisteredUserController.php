@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Models\Endereco;
+
+
 
 class RegisteredUserController extends Controller
 {
@@ -27,24 +30,67 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+
+
+public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        $user_pf = '';
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
+            $file = $request->file('foto');
+            $nomeimagem = sha1(uniqid($file->getClientOriginalName(), true)) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('assets/UsuarioPF'), $nomeimagem);
+            $user_pf = 'assets/UsuarioPF/' . $nomeimagem;
+        }
 
-        event(new Registered($user));
+        
+
+        // forcecreate por conta do erro do adm, resolver isso depois na integração
+        $user = User::forceCreate([
+            'createdBy' => 0,
+            'name' => $request->input('user_name'),
+            'email' => $request->input('user_email'),
+            'password' => Hash::make($request->input('user_password')),
+            'phone' => $request->input('user_phone'),
+            'birthday' => $request->input('user_birthday'),
+            'cpf' => $request->input('user_cpf'),
+            'balance' => 0,
+            'userpf' => $user_pf,
+            'adm' => 0,
+            
+            ]); 
+
+        if ($request->filled('endress_StreetNumber') || $request->filled('endress_cep') || $request->filled('endress_StreetExtra')) {
+            $cep = $request->input('endress_cep');
+            $viaCepData = [];
+
+            if ($cep) {
+                $cep = preg_replace('/[^0-9]/', '', $cep);
+                $response = @file_get_contents("https://viacep.com.br/ws/{$cep}/json/");
+                if ($response !== false) {
+                    $viaCepData = json_decode($response, true);
+                }
+            }
+
+            Endereco::create([
+                'endress_StreetNumber' => $request->input('endress_StreetNumber'),
+                'endress_cep' => $cep,
+                'endress_StreetExtra' => $request->input('endress_StreetExtra'),
+                'usuarios_user_id' => $user->id, 
+                'endress_Bairro' => $viaCepData['bairro'] ?? '',
+                'endress_street' => $viaCepData['logradouro'] ?? '',
+                'endress_Estado' => $viaCepData['uf'] ?? '',
+                'endress_City' => $viaCepData['localidade'] ?? '',
+            ]);
+        }
+
+
+                event(new Registered($user));
 
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
+
+
     }
 }
