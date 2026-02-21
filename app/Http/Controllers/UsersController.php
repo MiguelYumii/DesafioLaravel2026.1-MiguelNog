@@ -2,58 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Usuario;
+use App\Models\User;
 use App\Models\Endereco;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth; 
 
 class UsersController extends Controller
 {
     public function index()  
     {
-        $users = Usuario::all();
+        $users = User::all();
+        $users = \App\Models\User::paginate(50);
         $enderecos = Endereco::all();
         return view('CRUD_Usuario', compact('users', 'enderecos')); 
-
     }
+    
 
-
+    //criar
     public function store(Request $request)
     {
-      
-    
-        $user_pf = null;
+        $user_pf = '';
+
         if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
             $file = $request->file('foto');
             $nomeimagem = sha1(uniqid($file->getClientOriginalName(), true)) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('assets/UsuarioPF'), $nomeimagem);
             $user_pf = 'assets/UsuarioPF/' . $nomeimagem;
         }
-        // a foto null deixa com as inicias, o blade faz isso já
+
+        // forcecreate por conta do erro do adm, resolver isso depois na integração
+        $user = User::forceCreate([
+            'name' => $request->input('user_name'),
+            'email' => $request->input('user_email'),
+            'password' => Hash::make($request->input('user_password')),
+            'phone' => $request->input('user_phone'),
+            'birthday' => $request->input('user_birthday'),
+            'cpf' => $request->input('user_cpf'),
+            'balance' => 0,
+            'userpf' => $user_pf,
+            'adm' => 0,
+            
+            ]); 
 
 
-        
-        $usuario = Usuario::create([
-            'user_name' => $request->input('user_name'),
-            'user_email' => $request->input('user_email'),
-            'user_password' => Hash::make($request->user_password),
-            'user_phone' => $request->input('user_phone'),
-            'user_birthday' => $request->input('user_birthday'),
-            'user_cpf' => $request->input('user_cpf'),
-            'user_balance' => 0,
-            'user_pf' => $user_pf,
-            'user_adm' => 0,
-            'user_createdBy' => null
-        ]);
 
-
-        // Endereço do viacep jogado pro banco
         if ($request->filled('endress_StreetNumber') || $request->filled('endress_cep') || $request->filled('endress_StreetExtra')) {
             $cep = $request->input('endress_cep');
-            $viaCepData = null;
+            $viaCepData = [];
+
             if ($cep) {
-                $cep = preg_replace('/[^0-9]/', '', $cep); // tirar formatação do viacepr
+                $cep = preg_replace('/[^0-9]/', '', $cep);
                 $response = @file_get_contents("https://viacep.com.br/ws/{$cep}/json/");
                 if ($response !== false) {
                     $viaCepData = json_decode($response, true);
@@ -64,7 +64,7 @@ class UsersController extends Controller
                 'endress_StreetNumber' => $request->input('endress_StreetNumber'),
                 'endress_cep' => $cep,
                 'endress_StreetExtra' => $request->input('endress_StreetExtra'),
-                'usuarios_user_id' => $usuario->user_id,
+                'usuarios_user_id' => $user->id, 
                 'endress_Bairro' => $viaCepData['bairro'] ?? '',
                 'endress_street' => $viaCepData['logradouro'] ?? '',
                 'endress_Estado' => $viaCepData['uf'] ?? '',
@@ -76,64 +76,81 @@ class UsersController extends Controller
     }
 
 
+    //apagar
     public function destroy($id)
     {
-        $usuario = Usuario::findOrFail($id);
-        // parte pra deletar o endereço do usuario do banco, quando vc deleta o user
-        Endereco::where('usuarios_user_id', $usuario->user_id)->delete();
-        $usuario->delete();
-        File::delete($usuario->user_pf); 
+        $user = User::findOrFail($id);
+        Endereco::where('usuarios_user_id', $user->id)->delete();
+        $user->delete();
+        
+        if($user->userpf && File::exists(public_path($user->userpf))) {
+             File::delete(public_path($user->userpf)); 
+        }
+
         return redirect()->route('index')->with('success', 'Usuário deletado com sucesso!');
     }
 
-    
 
 
-    public function update(Request $request, $id) //EDITAR USUÁRIO
+    //editar
+    public function update(Request $request, $id)
     {
-
-        //TABELA DE USUARIOS
-        $user = Usuario::findOrFail($id);
+        $user = User::findOrFail($id);
         $data = $request->all();
+
+        
+
+
         $updateData = [
-            'user_name'     => $data['user_name'] ?? $user->user_name,
-            'user_email'    => $data['user_email'] ?? $user->user_email,
-            'user_password' => $data['user_password'] ?? $user->user_password,
-            'user_phone'    => $data['user_phone'] ?? $user->user_phone,
-            'user_birthday' => $data['user_birthday'] ?? $user->user_birthday,
-            'user_cpf'      => $data['user_cpf'] ?? $user->user_cpf,
-            'user_balance'  => $user->user_balance,
-            'user_adm'      => $user->user_adm,
+            'name'     => $data['user_name'] ?? $user->name,
+            'email'    => $data['user_email'] ?? $user->email,
+            'phone'    => $data['user_phone'] ?? $user->phone,
+            'birthday' => $data['user_birthday'] ?? $user->birthday,
+            'cpf'      => $data['user_cpf'] ?? $user->cpf,
         ];
 
-        // Código pra salvar a fotto do perfil
+        if (!empty($data['user_password'])) {
+            $updateData['password'] = Hash::make($data['user_password']);
+        }
+
         if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
+            if($user->userpf && File::exists(public_path($user->userpf))) {
+                File::delete(public_path($user->userpf)); 
+            }
+
             $file = $request->file('foto');
             $nomeimagem = sha1(uniqid($file->getClientOriginalName(), true)) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('assets/UsuarioPF'), $nomeimagem);
-            $updateData['user_pf'] = 'assets/UsuarioPF/' . $nomeimagem;
+            $updateData['userpf'] = 'assets/UsuarioPF/' . $nomeimagem;
         }
-        $user->update($updateData);
+        
+        $user->forceFill($updateData)->save();
 
-
-
-        //TABELA DE ENDEREÇO
-        $endereco = Endereco::where('usuarios_user_id', $user->user_id)->first();
-       
+        $endereco = Endereco::where('usuarios_user_id', $user->id)->first();
+        if ($endereco) {
             $enderecoData = [
-                'endress_StreetNumber' => $data['numerocasa']  ?? $endereco->endress_StreetNumber,
-                'endress_cep'          => $data['cep']         ?? $endereco->endress_cep,
-                'endress_StreetExtra'  => $data['complemento'] ?? $endereco->endress_StreetExtra,
+                'endress_StreetNumber' => $data['endress_StreetNumber'] ?? $endereco->endress_StreetNumber,
+                'endress_cep'          => $data['endress_cep']          ?? $endereco->endress_cep,
+                'endress_StreetExtra'  => $data['endress_StreetExtra']  ?? $endereco->endress_StreetExtra,
             ];
-            $endereco->update($enderecoData);
+
+            if (!empty($data['endress_cep'])) {
+                $cep = preg_replace('/[^0-9]/', '', $data['endress_cep']);
+                $response = @file_get_contents("https://viacep.com.br/ws/{$cep}/json/");
+                if ($response !== false) {
+                    $viaCepData = json_decode($response, true);
+                    if (!isset($viaCepData['erro'])) {
+                        $enderecoData['endress_Bairro'] = $viaCepData['bairro'] ?? $endereco->endress_Bairro;
+                        $enderecoData['endress_street'] = $viaCepData['logradouro'] ?? $endereco->endress_street;
+                        $enderecoData['endress_Estado'] = $viaCepData['uf'] ?? $endereco->endress_Estado;
+                        $enderecoData['endress_City'] = $viaCepData['localidade'] ?? $endereco->endress_City;
+                    }
+                }
+            }
+
+            $endereco->forceFill($enderecoData)->save();
+        }
         
         return redirect()->route('index');
-
     }
-
-  
-
-
-
-
 }

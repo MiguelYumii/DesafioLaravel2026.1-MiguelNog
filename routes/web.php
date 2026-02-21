@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
+ use App\Http\Controllers\UsersController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,8 +20,9 @@ Route::get('/Navbar', function () {
 });
     
 
-use App\Http\Controllers\UsersController;
 Route::get('/CRUD_Usuario', [UsersController::class, 'index']);
+Route::get('/CRUD_Adm', [UsersController::class, 'index']);
+Route::get('/CRUD_Produtos', [ProductController::class, 'index']);
 
 
 
@@ -27,7 +31,13 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
+
+
+// ======== Modais das Tabelas =========//
+
 Route::middleware('auth')->group(function () {
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -45,7 +55,25 @@ Route::post('/users', [App\Http\Controllers\UsersController::class, 'store'])->n
 Route::put('/users/{id}', [App\Http\Controllers\UsersController::class, 'update'])->name('update');
 Route::delete('/users/{id}', [App\Http\Controllers\UsersController::class, 'destroy'])->name('destroy');
 
+// =====================================//
 
+
+
+
+
+
+Route::get('/products/create', [App\Http\Controllers\ProductController::class, 'create'])->name('create');
+
+// ======== Modais das Tabelas PRODUTOS =========//
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/products', [ProductController::class, 'index'])->name('index');
+    Route::post('/products', [ProductController::class, 'store'])->name('store');
+    Route::put('/products/{product_id}', [ProductController::class, 'update'])->name('update');
+    Route::delete('/products/{product_id}', [ProductController::class, 'destroy'])->name('destroy');     
+});
+// =====================================//
 
 
 
