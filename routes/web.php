@@ -5,30 +5,46 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\AdmController;
 
+
+
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-
+//Pagina Inicial
 Route::get('/Pagina_Inicial', function () {
     return view('Pagina_Inicial'); 
 });
     
+// Navbar
 Route::get('/Navbar', function () {
     return view('Navbar'); 
 });
     
 
+
+// CRUDs
 Route::get('/CRUD_Usuario', [UsersController::class, 'index']);
 Route::get('/CRUD_Adm', [AdmController::class, 'index']);
 
 
-
-
-
+//dashboard
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+
+//Login
+Route::post('/login', function () {
+    return 'Autenticação de Usuário';
+})->name('login');
+
+
+
+
+
+
 
 
 
@@ -40,7 +56,7 @@ Route::middleware('auth')->group(function () {
 
 
 
-
+// Necessita ter login para acessar aqui
 Route::middleware(['auth'])->group(function () {
 
         // Rotas do CRUD Usuario Comum
@@ -58,18 +74,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/admin/users', [App\Http\Controllers\AdmController::class, 'store'])->name('adm.store');
         Route::put('/admin/users/{id}', [App\Http\Controllers\AdmController::class, 'update'])->name('adm.update');
         Route::delete('/admin/users/{id}', [App\Http\Controllers\AdmController::class, 'destroy'])->name('adm.destroy');
-        // ==================================================
 });
-
-
-
-
-
-//Login
-Route::post('/login', function () {
-    return 'Autenticação de Usuário';
-})->name('login');
-
+// ==================================================
 
 
 
