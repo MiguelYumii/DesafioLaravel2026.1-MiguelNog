@@ -3,7 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
- use App\Http\Controllers\UsersController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\AdmController;
 
 
 Route::get('/', function () {
@@ -50,13 +51,21 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/users', [App\Http\Controllers\UsersController::class, 'index'])->name('index');
 
-Route::get('/users/create', [App\Http\Controllers\UsersController::class, 'create'])->name('create');
-Route::post('/users', [App\Http\Controllers\UsersController::class, 'store'])->name('store');
-Route::put('/users/{id}', [App\Http\Controllers\UsersController::class, 'update'])->name('update');
-Route::delete('/users/{id}', [App\Http\Controllers\UsersController::class, 'destroy'])->name('destroy');
 
-// =====================================//
+Route::middleware(['auth'])->group(function () {
 
+        Route::get('/users/create', [App\Http\Controllers\UsersController::class, 'create'])->name('create');
+        Route::post('/users', [App\Http\Controllers\UsersController::class, 'store'])->name('store');
+        Route::put('/users/{id}', [App\Http\Controllers\UsersController::class, 'update'])->name('update');
+        Route::delete('/users/{id}', [App\Http\Controllers\UsersController::class, 'destroy'])->name('destroy');
+
+        Route::get('/admin/users', [App\Http\Controllers\AdmController::class, 'index'])->name('adm.index');
+        Route::post('/admin/users', [App\Http\Controllers\AdmController::class, 'store'])->name('adm.store');
+        Route::put('/admin/users/{id}', [App\Http\Controllers\AdmController::class, 'update'])->name('adm.update');
+        Route::delete('/admin/users/{id}', [App\Http\Controllers\AdmController::class, 'destroy'])->name('adm.destroy');
+      
+      });
+        // ==================================================
 
 
 
