@@ -16,18 +16,18 @@
     @include('Navbar')
 </header>
 
-<body class="bg-[#1a1a1a] min-h-screen w-full font-sans text-white  m-0 p-0 block" >
+<body class="bg-[#010D23] min-h-screen w-full font-sans text-white  m-0 p-0 block" >
 
 
 
 <!-- ===== BARRA DE BUSCA COM FILTRO ===== -->
 
     <div class="w-full max-w-4xl mx-auto p-4 mt-4">
-        <form action="{{ route('produtos.buscar') }}" method="GET" class="block text-white text-xl font-bold mb-2 ml-1">
+        <form action="{{route('produtos.buscar')}}" method="GET" class="block text-white text-xl font-bold mb-2 ml-1">
             O que procura?
         
             <div class="flex gap-3 mt-2">
-                <input type="text" name="termo" value="{{ request('termo') }}" placeholder="Buscar produtos..." class="flex-1 bg-white rounded-full px-6 py-2 text-black outline-none focus:ring-2 focus:ring-gray-400">
+                <input type="text" name="termo" value="{{request('termo')}}" placeholder="Buscar produtos..." class="flex-1 bg-white rounded-full px-6 py-2 text-black outline-none focus:ring-2 focus:ring-gray-400">
                 
                 <select name="product_category" class="bg-[#808080] text-white font-bold px-8 py-2 rounded-full outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer"> 
                     <option value="">Filtrar por: </option>
@@ -50,20 +50,24 @@
         
         <main class="bg-white mx-10 rounded-2xl p-8 text-black shadow-lg mb-8"> 
             <div class="grid grid-cols-2 md:grid-cols-6 gap-6 w-full">
+
+
                 @forelse ($products as $produto)
                     <div class="group bg-[#e5e5e5] shadow-sm rounded-xl flex flex-col items-center p-2 h-fit border border-gray-300 hover:shadow-md transition-shadow">
                         <div class="relative w-[90%] aspect-square overflow-hidden rounded-lg border bg-white mt-2">
-                            <img src="{{ asset($produto->product_image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $produto->product_name }}">
+                            <img src="{{asset($produto->product_image)}}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $produto->product_name }}">
                         </div>
                         <div class="w-full p-2 mt-1">
                             <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
                             <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
-                            <button class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-10 max-w-full w-full rounded-md text-center transition-colors mt-2"> 
+
+                            <a href="{{route('show', $produto->product_id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-10 max-w-full w-full rounded-md text-center transition-colors mt-2"> 
                                 COMPRAR
-                            </button>
+                            </a>
+
+                            
                         </div>
                     </div>
-
 
 <!-- ========== CASO NÃO TENHA ========= -->
                 @empty
@@ -87,7 +91,7 @@
 
         <section class="mb-8 w-full mt-4">
             <div class="flex items-center gap-1 mb-1">
-                <h1 class="text-[20px] font-bold mt-7">⭐Destaque</h1>
+                <h1 class="text-[20px] font-bold mt-7 ml-10">⭐Destaque</h1>
             </div>
 
             <div class="bg-[#d4d4d4] p-6 rounded-xl w-full">
@@ -104,9 +108,9 @@
                                             <div class="w-full p-2">
                                                 <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
                                                 <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
-                                                <button class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-10 max-w-full rounded-md text-center transition-colors mt-1.5"> 
-                                                    COMPRAR
-                                                </button>
+                                                    <a href="{{route('show', $produto->product_id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-10 max-w-full w-full rounded-md text-center transition-colors mt-2"> 
+                                                        COMPRAR
+                                                    </a>
                                             </div>
                                         </div>
                                     @endforeach
@@ -151,9 +155,9 @@
                                                 <div class="w-full p-2">
                                                     <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
                                                     <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
-                                                    <button class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-10 max-w-full rounded-md text-center transition-colors mt-1.5"> 
+                                                    <a href="{{route('show', $produto->product_id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-10 max-w-full w-full rounded-md text-center transition-colors mt-2"> 
                                                         COMPRAR
-                                                    </button>
+                                                    </a>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -195,9 +199,9 @@
                                                 <div class="w-full p-2">
                                                     <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
                                                     <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
-                                                    <button class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-10 max-w-full rounded-md text-center transition-colors mt-1.5"> 
+                                                    <a href="{{route('show', $produto->product_id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-10 max-w-full w-full rounded-md text-center transition-colors mt-2"> 
                                                         COMPRAR
-                                                    </button>
+                                                    </a>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -240,9 +244,9 @@
                                                 <div class="w-full p-2">
                                                     <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
                                                     <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
-                                                    <button class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-10 max-w-full rounded-md text-center transition-colors mt-1.5"> 
+                                                    <a href="{{route('show', $produto->product_id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-10 max-w-full w-full rounded-md text-center transition-colors mt-2"> 
                                                         COMPRAR
-                                                    </button>
+                                                    </a>
                                                 </div>
                                             </div>
                                         @endforeach

@@ -41,10 +41,7 @@ Route::get('/dashboard', function () {
 
 
 
-
-
-
-Route::get('/produto/{id}', [ProductController::class, 'show'])->name('produto.show')->middleware('auth');
+Route::get('/produto/{id}', [ProductController::class, 'show'])->name('show')->middleware('auth');
 
 
 // ======== Modais das Tabelas =========//

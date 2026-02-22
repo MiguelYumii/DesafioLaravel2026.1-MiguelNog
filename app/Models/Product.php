@@ -7,17 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    use HasFactory; // Essa linha é o que conecta o Model à Factory!
+    use HasFactory;
 
-    /**
-     * Os atributos que podem ser preenchidos em massa.
-     * Baseado no seu ProductController.
-     *
-     * @var array<int, string>
-     */
+    
 
     protected $table = 'product';
-    
+    protected $primaryKey = 'product_id';
     public $timestamps = false;
 
 

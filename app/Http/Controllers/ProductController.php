@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\Auth;
 class ProductController extends Controller
 {
 
+    public function show($id)
+    {
+    $produto = \App\Models\Product::findOrFail($id);
+    
+    return view('Pagina_Individual', compact('produto'));
+    }
+
+
     public function inicio() 
     {
 
