@@ -9,7 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 </head>
 
 
@@ -27,71 +27,63 @@
 
             <div class="flex items-center gap-1 mb-1">
                 
-                <h1 class="text-[20px] font-bold mt-7">⭐Mais Comprados</h1>
+                <h1 class="text-[20px] font-bold mt-7">⭐Destaque</h1>
             </div>
 
           
     
             <!-- Itens do carrosel -->       
-                <div class="bg-[#d4d4d4] p-4 rounded-md w-full">
-                    <div id="indicators-carousel" class="relative w-full" data-carousel="static">
-                        <div class="relative h-80 overflow-hidden flex gap-4 overflow-x-auto snap-x scrollbar-hide">
-            
-                            <div class="hidden duration-700 ease-in-out" data-carousel-item="active">
+               <div class="bg-[#d4d4d4] p-6 rounded-xl w-full">
+                    <div id="product-carousel" class="relative w-full" data-carousel="slide">
+                        
+                        <div class="relative h-80 overflow-hidden rounded-lg">
                             
-                                            
-                                <!-- Container dos Produtos-->
-                                <div class="grid grid-cols-3 md:grid-cols-6 gap-4"> 
-    
-                                    @foreach ($products as $produto)
-                                        <div class="bg-[#e5e5e5] shadow-sm rounded-xl flex flex-col items-center p-2">
-                                            
-                                            <img src="{{ asset($produto->product_image) }}" class="w-[90%] rounded-xl border mt-1 aspect-square object-cover" alt="Imagem do produto">
-                                            
-                                            <div class="w-full p-2">
-                                                <h2 class="text-black font-bold text-2xs md:text-xs leading-tight line-clamp-2">{{ $produto->product_name }}</h2>
-                                                <h2 class="text-green-900 font-bold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</h2>
+                            @foreach ($products->take(18)->chunk(6) as $index => $chunk)
+                                <div class="hidden duration-700 ease-in-out" data-carousel-item="{{ $index == 0 ? 'active' : '' }}">
+                                    <div class="grid grid-cols-3 md:grid-cols-6 gap-4 w-full h-full px-12 py-2"> 
+                                        @foreach ($chunk as $produto)
+                                            <div class="group bg-[#e5e5e5] shadow-sm rounded-xl flex flex-col items-center p-2 h-fit border border-gray-300 hover:shadow-md transition-shadow">
+                                                <div class="relative w-[90%] aspect-square overflow-hidden rounded-lg border bg-white">
+                                                    <img src="{{ asset($produto->product_image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $produto->product_name }}">
+                                                </div>
+                                                <div class="w-full p-2">
+                                                    <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
+                                                    <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
+                                                    <button class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-10 max-w-full rounded-md text-center transition-colors mt-1.5"> 
+                                                        COMPRAR
+                                                    </button>
 
-                                                <button class="bg-green-900 hover:bg-green-800  flex items-center justify-center text-white font-bold py-2 px-10 max-w-full rounded-md transition-colors mt-1.5"> COMPRAR</button>
+                                                </div>
                                             </div>
-                                            
-                                        </div>
-                                    @endforeach
-
+                                        @endforeach
+                                    </div>
                                 </div>
-                                <!-------------------------->
-                                
-                            <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                            @endforeach
                         </div>
+
+                        <!-- Setas do Carrosel -->
+                        <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 group focus:outline-none" data-carousel-prev>
+                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 transition-all">
+                                <svg class="w-4 h-4 text-gray-800" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/></svg>
+                            </span>
+                        </button>
+
+                        <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 group focus:outline-none" data-carousel-next>
+                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 transition-all">
+                                <svg class="w-4 h-4 text-gray-800" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/></svg>
+                            </span>
+                        </button>
+
+                        <div class="absolute  z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3">
+                            @for ($i=0; $i<3; $i++)
+                                <button type="button" class="w-3 h-3 rounded-full transition-colors" aria-current="{{$i==0 ? 'true':'false'}}" aria-label="Slide {{$i+1}}" data-carousel-slide-to="{{$i}}"></button>
+                            @endfor
+                        </div>
+                        <!-------------------->
+
                     </div>
                 </div>
-            
-                <!-- Bolinha da Paginação-->
-                    <div class="absolute z-30 top-77 flex -translate-x-1/2 space-x-3 bottom-5 left-1/2">
-                        <button type="button" class="w-3 h-3 rounded-full bg-white/50" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
-                        <button type="button" class="w-3 h-3 rounded-full bg-white/50" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
-                    </div>
-                <!------------------------->
-            
-                 <!------Setas Laterais----->
-                    <div>
-                            <button type="button" class="absolute top-39 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
-                                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/30 group-hover:bg-black/50">
-                                    <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                                    </svg>
-                                </span>
-                            </button>
-
-                            <button type="button" class="absolute top-39 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
-                                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-black/30 group-hover:bg-black/50">
-                                    <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                    </svg>
-                                </span>
-                            </button>
-                    </div>
-                <!------------------------->
+            <!------------------------->
 
     
 
@@ -120,61 +112,166 @@
 
         <main class="bg-[#e5e5e5] mx-10 rounded-2xl overflow-hidden pb-8 text-black shadow-lg">            
 
+
+
+        <!-- COMPUTADORES -->
             <div class="w-full">
                 <h3 class="font-bold text-sm px-6 pt-4 pb-2">Computadores</h3>
-                <div class="bg-[#d4d4d4] p-4 w-full grid grid-cols-4 md:grid-cols-8 gap-3">
-                
-                        <div class="bg-[#e5e5e5] shadow-sm rounded-xl flex flex-col items-center p-2">
-                            <img src="/assets/Logos/UserPF.png" class="w-[90%] rounded-xl border mt-1 aspect-square object-cover">
-                            <div class="w-full p-2">
-                                    <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2">Fursuit Mariposa</h2>
-                                    <h2 class="text-green-900 font-bold mt-2 text-xs md:text-sm">R$: 50,00</h2>
+                    <div class="bg-[#d4d4d4] p-6 rounded-xl w-full">
+                    <div id="product-carousel" class="relative w-full" data-carousel="slide">
+                        
+                        <div class="relative h-80 overflow-hidden rounded-lg">
+                            
+                            @foreach ($products->take(30)->chunk(6) as $index => $chunk)
+                                <div class="hidden duration-700 ease-in-out" data-carousel-item="{{ $index == 0 ? 'active' : '' }}">
+                                    <div class="grid grid-cols-3 md:grid-cols-6 gap-4 w-full h-full px-12 py-2"> 
+                                        @foreach ($chunk as $produto)
+                                            <div class="group bg-[#e5e5e5] shadow-sm rounded-xl flex flex-col items-center p-2 h-fit border border-gray-300 hover:shadow-md transition-shadow">
+                                                <div class="relative w-[90%] aspect-square overflow-hidden rounded-lg border bg-white">
+                                                    <img src="{{ asset($produto->product_image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $produto->product_name }}">
+                                                </div>
+                                                <div class="w-full p-2">
+                                                    <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
+                                                    <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
+                                                    <button class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-10 max-w-full rounded-md text-center transition-colors mt-1.5"> 
+                                                        COMPRAR
+                                                    </button>
 
-                                    <button class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-10 max-w-full rounded-md text-center transition-colors mt-1.5"> COMPRAR</button>
-                            </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
 
+                        <!-- Setas do Carrosel -->
+
+                        <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 group focus:outline-none" data-carousel-prev>
+                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 transition-all">
+                                <svg class="w-4 h-4 text-gray-800" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/></svg>
+                            </span>
+                        </button>
+
+                        <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 group focus:outline-none" data-carousel-next>
+                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 transition-all">
+                                <svg class="w-4 h-4 text-gray-800" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/></svg>
+                            </span>
+                        </button>
+
+                        <!-------------------->
+                    </div>
                 </div>
             </div>
+        <!----------------------->
 
 
 
+
+        <!-- PERIFÉRICOS -->
             <div class="w-full">
                 <h3 class="font-bold text-sm px-6 pt-4 pb-2">Periféricos</h3>
-                <div class="bg-[#d4d4d4] p-4 w-full grid grid-cols-4 md:grid-cols-8 gap-3">
-                
-                        <div class="bg-[#e5e5e5] shadow-sm rounded-xl flex flex-col items-center p-2">
-                            <img src="/assets/Logos/UserPF.png" class="w-[90%] rounded-xl border mt-1 aspect-square object-cover">
-                            <div class="w-full p-2">
-                                <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2">Fursuit Mariposa</h2>
-                                <h2 class="text-green-900 font-bold mt-2 text-xs md:text-sm">R$:50,00</h2>
+                    <div class="bg-[#d4d4d4] p-6 rounded-xl w-full">
+                    <div id="product-carousel" class="relative w-full" data-carousel="slide">
+                        
+                        <div class="relative h-80 overflow-hidden rounded-lg">
+                            
+                            @foreach ($products->take(30)->chunk(6) as $index => $chunk)
+                                <div class="hidden duration-700 ease-in-out" data-carousel-item="{{ $index == 0 ? 'active' : '' }}">
+                                    <div class="grid grid-cols-3 md:grid-cols-6 gap-4 w-full h-full px-12 py-2"> 
+                                        @foreach ($chunk as $produto)
+                                            <div class="group bg-[#e5e5e5] shadow-sm rounded-xl flex flex-col items-center p-2 h-fit border border-gray-300 hover:shadow-md transition-shadow">
+                                                <div class="relative w-[90%] aspect-square overflow-hidden rounded-lg border bg-white">
+                                                    <img src="{{ asset($produto->product_image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $produto->product_name }}">
+                                                </div>
+                                                <div class="w-full p-2">
+                                                    <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
+                                                    <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
+                                                    <button class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-10 max-w-full rounded-md text-center transition-colors mt-1.5"> 
+                                                        COMPRAR
+                                                    </button>
 
-                            <button class="bg-green-900 hover:bg-green-800  flex items-center justify-center text-white font-bold py-2 px-10 max-w-full rounded-md transition-colors mt-1.5"> COMPRAR</button>
-                            </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
 
-                </div>
+                        <!-- Setas do Carrosel -->
 
+                        <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 group focus:outline-none" data-carousel-prev>
+                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 transition-all">
+                                <svg class="w-4 h-4 text-gray-800" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/></svg>
+                            </span>
+                        </button>
 
+                        <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 group focus:outline-none" data-carousel-next>
+                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 transition-all">
+                                <svg class="w-4 h-4 text-gray-800" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/></svg>
+                            </span>
+                        </button>
 
-
-            <div class="w-full">
-                <h3 class="font-bold text-sm px-6 pt-4 pb-2">Domésticos</h3>
-                <div class="bg-[#d4d4d4] p-4 w-full grid grid-cols-4 md:grid-cols-8 gap-3">
-
-                        <div class="bg-[#e5e5e5] shadow-sm rounded-xl flex flex-col items-center p-2">
-                            <img src="/assets/Logos/UserPF.png" class="w-[90%] rounded-xl border mt-1 aspect-square object-cover">
-                            <div class="w-full p-2">
-                                <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2">Fursuit Mariposa</h2>
-                                <h2 class="text-green-900 font-bold mt-2 text-xs md:text-sm">R$:50,00</h2>
-
-                            <button class="bg-green-900 hover:bg-green-800  flex items-center justify-center text-white font-bold py-2 px-10 max-w-full rounded-md transition-colors mt-1.5"> COMPRAR</button>
-                        </div>
-
-
+                        <!-------------------->
+                    </div>
                 </div>
             </div>
+        <!----------------------->
 
+
+
+
+        <!-- DOMÉSTICOS -->
+            <div class="w-full">
+                <h3 class="font-bold text-sm px-6 pt-4 pb-2">Domésticos</h3>
+                    <div class="bg-[#d4d4d4] p-6 rounded-xl w-full">
+                    <div id="product-carousel" class="relative w-full" data-carousel="slide">
+                        
+                        <div class="relative h-80 overflow-hidden rounded-lg">
+                            
+                            @foreach ($products->take(30)->chunk(6) as $index => $chunk)
+                                <div class="hidden duration-700 ease-in-out" data-carousel-item="{{ $index == 0 ? 'active' : '' }}">
+                                    <div class="grid grid-cols-3 md:grid-cols-6 gap-4 w-full h-full px-12 py-2"> 
+                                        @foreach ($chunk as $produto)
+                                            <div class="group bg-[#e5e5e5] shadow-sm rounded-xl flex flex-col items-center p-2 h-fit border border-gray-300 hover:shadow-md transition-shadow">
+                                                <div class="relative w-[90%] aspect-square overflow-hidden rounded-lg border bg-white">
+                                                    <img src="{{ asset($produto->product_image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $produto->product_name }}">
+                                                </div>
+                                                <div class="w-full p-2">
+                                                    <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
+                                                    <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
+                                                    <button class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-10 max-w-full rounded-md text-center transition-colors mt-1.5"> 
+                                                        COMPRAR
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Setas do Carrosel -->
+
+                        <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 group focus:outline-none" data-carousel-prev>
+                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 transition-all">
+                                <svg class="w-4 h-4 text-gray-800" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/></svg>
+                            </span>
+                        </button>
+
+                        <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 group focus:outline-none" data-carousel-next>
+                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 transition-all">
+                                <svg class="w-4 h-4 text-gray-800" fill="none" viewBox="0 0 6 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/></svg>
+                            </span>
+                        </button>
+
+                        <!-------------------->
+                    </div>
+                </div>
+            </div>
+        <!----------------------->
 
 
 

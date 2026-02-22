@@ -15,7 +15,7 @@ class ProductController extends Controller
     {
         $user = Auth::user();
         $users = User::all();
-        $products = Product::paginate(12); 
+        $products = Product::paginate(18); 
         return view('Pagina_Inicial', compact('products', 'user', 'users')); 
     }
 
