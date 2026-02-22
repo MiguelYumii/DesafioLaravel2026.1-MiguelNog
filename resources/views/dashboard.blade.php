@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Mouse Tech</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="icon" type="image/png" href="{{asset('assets/Logos/Logo Mouse Tech.png')}}">
+
 </head>
+
+
+
+
 <body class="bg-[#03223F] font-sans antialiased min-h-screen">
 
     <div class="w-full flex justify-center py-6 bg-white dark:bg-gray-800 shadow-md border-b border-gray-200 dark:border-gray-700">

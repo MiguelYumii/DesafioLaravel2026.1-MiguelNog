@@ -10,7 +10,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <link rel="icon" type="image/png" href="{{ asset('assets/Logos/Logo Mouse Tech.png') }}">
+
+
 </head>
+
+
+
 
 <header>
     @include('Navbar')

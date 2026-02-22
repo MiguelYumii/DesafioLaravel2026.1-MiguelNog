@@ -9,6 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="icon" type="image/png" href="{{asset('assets/Logos/Logo Mouse Tech.png')}}">
 
 </head>
 
@@ -68,21 +69,30 @@
                                         <span class="text-gray-300">Usuário</span>
                                     @endif
                                 </td>
+
+        
                                 <td class="px-6 py-4">
                                     <div class="text-white flex items-center justify-center gap-5">
+
                                     @if(auth()->user()->adm == 1 || auth()->user()->id == $User->id)
                                         <button data-modal-target="ver-modal-{{$User->id}}" data-modal-toggle="ver-modal-{{$User->id}}" class="font-medium text-[#058C42] hover:text-green-400 hover:underline">Ver</button>
                                         <button data-modal-target="editar-modal-{{$User->id}}" data-modal-toggle="editar-modal-{{$User->id}}" class="font-medium text-[#f2ff38] hover:text-yellow-300 hover:underline">Editar</button>
                                         <button data-modal-target="popup-modal-{{$User->id}}" data-modal-toggle="popup-modal-{{$User->id}}" class="font-medium text-[#bd0f0f] hover:text-red-400 hover:underline">Excluir</button>
-                                    @else
+                               @else
                                         <span class="text-gray-500 italic">Sem Acesso</span>
                                      @endif
+                                     @if(auth()->user()->adm == 1)
+                                     <button data-modal-target="email-modal-{{$User->id}}" data-modal-toggle="email-modal-{{$User->id}}"  class="font-medium text-[#058C42] hover:text-[#17be62] hover:underline" type="button">
+                                         E-mail
+                                     </button>
+                                     @endif
                                     </div>
+
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
-                    </table>
+                   </table>
                 </div>
                 <!--=================================-->
 
@@ -124,11 +134,20 @@
 
                         <div class="mt-auto w-full pt-4 border-t border-slate-700/80">
                             <div class="flex items-center justify-center gap-4">
+                                
+                                @if(auth()->user()->adm == 1)
+                                    <button data-modal-target="email-modal-{{$User->id}}" data-modal-toggle="email-modal-{{$User->id}}" class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center shadow-md transition-all" type="button">
+                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                        Enviar E-mail
+                                    </button>
+                                @endif
+
+
                                 @if(auth()->user()->adm == 1 || auth()->user()->id == $User->id)
                                     <button data-modal-target="ver-modal-{{$User->id}}" data-modal-toggle="ver-modal-{{$User->id}}" class="font-medium text-[#058C42] hover:text-green-400 hover:underline transition-colors">Ver</button>
                                     <button data-modal-target="editar-modal-{{$User->id}}" data-modal-toggle="editar-modal-{{$User->id}}" class="font-medium text-[#f2ff38] hover:text-yellow-300 hover:underline transition-colors">Editar</button>
                                     <button data-modal-target="popup-modal-{{$User->id}}" data-modal-toggle="popup-modal-{{$User->id}}" class="font-medium text-[#bd0f0f] hover:text-red-400 hover:underline transition-colors">Excluir</button>
-                                @else
+                                     @else
                                     <span class="text-gray-500 italic text-sm">Sem Acesso</span>
                                 @endif
                             </div>
@@ -523,6 +542,68 @@
         </div>
     </div>
 </div> 
+
+
+
+
+
+
+<!-- MODAL PRA ENVIAR EMAIL -->
+<div id="email-modal-{{$user->id}}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-lg max-h-full">
+        <div class="relative bg-slate-700 border border-slate-500 rounded-lg shadow-lg">
+            
+            <div class="flex items-center justify-between p-4 md:p-5 border-b border-slate-600 rounded-t">
+                <h3 class="text-xl font-semibold text-white">
+                    Enviar e-mail para {{ $user->name }}
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-slate-600 hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="email-modal-{{$user->id}}">
+                    <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                </button>
+            </div>
+
+            <form action="{{route('contact.store') }}" method="POST" class="p-4 md:p-5">
+                @csrf
+                <input type="hidden" name="user_email" value="{{ $user->email }}">
+                <input type="hidden" name="user_name" value="{{ $user->name }}">
+
+                <div class="grid gap-4 mb-4 grid-cols-1">
+                    <div class="col-span-1 text-left">
+                        <label for="subject" class="block mb-2 text-sm font-medium text-white text-left">Assunto</label>
+                        <input type="text" name="subject" id="subject" class="bg-slate-800 border border-slate-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-400" placeholder="Ex: Informações sobre sua conta" required>
+                    </div>
+
+                    <div class="col-span-1 text-left">
+                        <label for="message" class="block mb-2 text-sm font-medium text-white">Sua Mensagem</label>
+                        <textarea id="message" name="message" rows="6" class="block p-2.5 w-full text-sm text-white bg-slate-800 rounded-lg border border-slate-600 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400" placeholder="Escreva aqui a mensagem para o usuário..." required></textarea>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end space-x-3 mt-6">
+                    <button data-modal-hide="email-modal-{{$user->id}}" type="button" class="text-white bg-slate-800 border border-slate-500 hover:bg-slate-900 font-medium rounded-lg text-sm px-5 py-2.5 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center shadow-lg transition-colors">
+                        Enviar Agora
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 

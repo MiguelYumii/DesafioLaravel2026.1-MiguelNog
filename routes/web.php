@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\AdmController;
-
+use App\Http\Controllers\ContactController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -92,6 +92,14 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/products/{product_id}', [ProductController::class, 'destroy'])->name('destroy');     
 });
 // =====================================//
+
+
+
+
+
+Route::get(uri: '/contact', action:[ContactController::class, 'index'])->name('contact.index'); 
+Route::post(uri: '/contact', action: [ContactController::class, 'store'])->name('contact.store'); 
+
 
 
 

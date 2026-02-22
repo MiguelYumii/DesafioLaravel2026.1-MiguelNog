@@ -34,7 +34,7 @@
                 </a>
          
                 <!-- Login -->
-                <div>
+                <a href="/profile">
                     @auth
                     <div class="w-fit h-fit flex items-center bg-[#2b5a97] rounded-full p-1 pr-5 border border-[#3b6ba7] shadow-lg">
                         
@@ -61,7 +61,7 @@
                     @else
                     <a href="/login" class="text-white font-bold hover:text-gray-300 px-4 py-2 bg-blue-700 rounded-lg">Entrar</a>
                     @endauth
-                </div>
+                </a>
                 
             </div>
         </div>
