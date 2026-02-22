@@ -28,12 +28,7 @@
                 class="">
         </a>
 
-        <!-- Barra de Pesquisa -->
-        <form action="/search" method="GET" class="col-span-3 flex items-center ">
-            <input type="text" name="query" placeholder="Buscar..." class="w-full  rounded-l-md px-4 py-2  focus:outline-none bg-white placeholder-gray-500">
-            <button type="submit"  class="px-4 py-2 bg-blue-500 text-white  hover:bg-blue-600 " ><i class="bi bi-search"></i></button>
-            <button type="button"  class="rounded-md px-4 py-2 bg-[#7e7e7e] text-white  hover:bg-[#696969]  " >Filtro</button>
-        </form>
+
 
 
         <!-- Dashboard -->

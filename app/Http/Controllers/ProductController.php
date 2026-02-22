@@ -13,12 +13,37 @@ class ProductController extends Controller
 
     public function inicio() 
     {
+
+        $destaques = Product::inRandomOrder()->take(18)->get();
         $user = Auth::user();
         $users = User::all();
         $products = Product::paginate(18); 
         return view('Pagina_Inicial', compact('products', 'user', 'users')); 
     }
 
+
+
+    public function buscar(Request $request)
+    {
+    $product_category = $request->input('product_category');
+    $termo = $request->input('termo');
+    $destaques = Product::inRandomOrder()->take(18)->get(); 
+    $query = Product::query();
+
+
+
+    if (!empty($product_category)) {
+        $query->where('product_category', $product_category);
+    }
+
+    if (!empty($termo)) {
+        $query->where('product_name', 'like', '%' . $termo . '%');
+    }
+
+    $products = $query->paginate(30);
+
+    return view('Pagina_Inicial', compact('products', 'destaques')); 
+    }
 
 
 

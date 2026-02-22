@@ -26,14 +26,27 @@ class ProductFactory extends Factory
     {
         return [
            
-            'product_image' => $this->faker->imageUrl(640, 480, 'products', true), 
             'product_autor' => $this->faker->randomFloat(0,200),
             'product_AutorPhone' => $this->faker->phoneNumber(),
             'product_name' => $this->faker->words(3, true), 
             'product_value' => $this->faker->randomFloat(2, 10, 1000), 
             'product_stock' => $this->faker->numberBetween(0, 200), 
             'product_description' => $this->faker->sentence(10), 
-            'product_category' => $this->faker->randomElement(['Eletrônicos', 'Periféricos', 'Domésticos', 'Computadores']),
+            'product_category' => $this->faker->randomElement(['Periféricos', 'Domésticos', 'Computadores']),
+            'product_image' => $this->faker->randomElement([
+                                '/assets/Logos/GordoTriste.jpeg',
+                                '/assets/produtos/teclado1.png',
+                                '/assets/produtos/teclado2.png',
+                                '/assets/produtos/Pcgamer2.png',
+                                '/assets/produtos/Pcgamer.png',
+                                '/assets/produtos/geladeira.jpg',
+                                '/assets/produtos/Liquidificador.png',
+                                '/assets/produtos/pcescritorio.jpg',
+                                '/assets/produtos/MouseEscritorio.png',
+                                '/assets/produtos/mouse.png',
+                                
+                                    
+            ]),
         ];
     }
 }

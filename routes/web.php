@@ -12,8 +12,15 @@ Route::get('/', function () {
 });
 
 
-Route::get('/Pagina_Inicial', [ProductController::class, 'inicio']);
+Route::get('/Pagina_Inicial', function () {
+    $destaques = \App\Models\Product::inRandomOrder()->take(18)->get();
+    $products = \App\Models\Product::all();
 
+    return view('Pagina_Inicial', compact('products', 'destaques'));
+});
+
+
+Route::get('/buscar', [ProductController::class, 'buscar'])->name('produtos.buscar');
 
 Route::get('/Navbar', [UsersController::class, 'navbar']);
 
@@ -33,6 +40,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
+
+
+
+
+Route::get('/produto/{id}', [ProductController::class, 'show'])->name('produto.show')->middleware('auth');
 
 
 // ======== Modais das Tabelas =========//
