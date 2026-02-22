@@ -6,6 +6,11 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\AdmController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\PagBankController;
+use App\Http\Controllers\HistoricoController;
+use App\Http\Controllers\VendasController;
+
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -99,6 +104,24 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get(uri: '/contact', action:[ContactController::class, 'index'])->name('contact.index'); 
 Route::post(uri: '/contact', action: [ContactController::class, 'store'])->name('contact.store'); 
+
+
+Route::get('/checkout/ativar/{checkout_id}', [PagBankController::class, 'ativarCheckout']);
+Route::post('/produto/comprar/{id}', [PagBankController::class, 'processarCompra'])->name('produto.comprar');
+
+
+Route::get('/meu-historico', [HistoricoController::class, 'index'])->name('historico.index');
+Route::post('/meu-historico/pdf', [HistoricoController::class, 'gerarPDF'])->name('historico.pdf');
+
+
+
+Route::get('/vendas', [VendasController::class, 'index'])->name('vendas.index');
+
+// Rota do pdf e do excell
+Route::post('/vendas/pdf', [VendasController::class, 'gerarPDF'])->name('vendas.pdf');
+Route::post('/vendas/excel', [VendasController::class, 'exportarExcel'])->name('vendas.excel');
+
+
 
 
 
