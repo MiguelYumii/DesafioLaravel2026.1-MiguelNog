@@ -142,10 +142,71 @@
         </div>
         <div class="mt-6 py-4 bg-slate-900 rounded-lg shadow-sm border border-slate-700 px-4 overflow-x-auto">
             <div class="mt-4">
-                {{ $products->links() }}
+
+
+
+<!-- GRAFICO DE PRODUTOS CADASTRADOS E PAGINAÇÃO -->
+
+    <diV class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="w-full md:w-auto"> {{ $products->links() }} </div>
+
+        @if(auth()->user()->adm)
+            <button id="btnMostrarGrafico" class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition-all active:scale-95 shadow-lg">
+                Histórico de Cadastros
+            </button>
+        @endif
+    </div>
+
+    @if(auth()->user()->adm)
+        <div id="containerGrafico" class="hidden mt-6 bg-slate-800 p-4 md:p-6 rounded-xl border border-slate-700 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-sm md:text-lg font-bold text-white border-l-4 border-blue-500 pl-3">Cadastros</h3>
+                <button id="btnFecharGrafico" class="text-slate-400 hover:text-red-400 text-2xl">&times;</button>
+            </div>
+            <div class="relative h-64 md:h-80 w-full"><canvas id="graficoProdutos"></canvas></div>
+        </div>
+
+        <script>
+            const tP = () => {
+                if (containerGrafico.classList.toggle('hidden') || window.cP) return;
+                window.cP = new Chart('graficoProdutos', { 
+                    type: 'bar', 
+                    data: { labels: @json($labelsMeses), datasets: [{ data: @json($dadosProdutos), backgroundColor: '#3b82f6' }] },
+                    options: { maintainAspectRatio: !1, plugins: { legend: { display: !1 } } }
+                });
+            };
+            btnMostrarGrafico.onclick = btnFecharGrafico.onclick = tP;
+        </script>
+    @endif
+</div>
+<!-- ============================ -->
+
+
+
+
+
+
+
             </div>
         </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -398,57 +459,6 @@
 
 
 
-<!-- GRAFICO DE PRODUTOS CADASTRADOS -->
-
-   @if(Auth::user()->adm == 1)
-    <button id="btnMostrarGrafico" class="mb-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition-colors">
-        Histórico de Cadastros
-    </button>
-
-    <div id="containerGrafico" class="hidden bg-slate-800 p-6 rounded-xl shadow-lg mb-8 border border-slate-700">
-        
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="text-lg font-bold text-white border-l-4 border-blue-500 pl-3">
-                Histórico de Cadastros
-            </h3>
-            <button id="btnFecharGrafico" class="text-slate-400 hover:text-red-400 font-semibold text-sm transition-colors">
-                ✕ Fechar
-            </button>
-        </div>
-        
-        <div class="relative w-full h-64 md:h-80">
-            <canvas id="graficoProdutos"></canvas>
-        </div>
-        
-    </div>
-
-
-    <!-- js do gráfico  (Se der tempo, tirar daqui) -->
-    <script>
-        let chart = null;
-        const container = document.getElementById('containerGrafico');
-
-        document.getElementById('btnMostrarGrafico').onclick = () => {
-            container.classList.remove('hidden');
-            
-            if (!chart) setTimeout(() => {
-                chart = new Chart(document.getElementById('graficoProdutos'), {
-                    type: 'bar',
-                    data: {
-                        labels: @json($labelsMeses),
-                        datasets: [{ label: 'Cadastros', data: @json($dadosProdutos), backgroundColor: '#3b82f6' }]
-                    },
-                    options: { maintainAspectRatio: false } 
-                });
-            }, 50);
-        };
-
-        document.getElementById('btnFecharGrafico').onclick = () => container.classList.add('hidden');
-    </script>
-
-@endif
-
-<!-- ============================ -->
 
 
 
