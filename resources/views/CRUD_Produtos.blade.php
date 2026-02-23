@@ -10,7 +10,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="icon" type="image/png" href="{{asset('assets/Logos/Logo Mouse Tech.png')}}">
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
 </head>
 
 
@@ -139,10 +141,9 @@
             @endforeach
         </div>
         <div class="mt-6 py-4 bg-slate-900 rounded-lg shadow-sm border border-slate-700 px-4 overflow-x-auto">
-            <style>
-                nav[role="navigation"] a, nav[role="navigation"] span { background-color: #03223F !important; color: white !important; border-color: #4a7bb7 !important; }
-                nav[role="navigation"] span[aria-current="page"] { background-color: #058C42 !important; color: white !important; }
-            </style>
+            <div class="mt-4">
+                {{ $products->links() }}
+            </div>
         </div>
     </div>
 
@@ -254,6 +255,7 @@
 
 
 <!-- MODAL DE EDITAR -->
+
     <div id="editar-modal-{{$produto->product_id}}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <div class="relative bg-slate-700 border border-default rounded-base shadow-sm p-4 md:p-6">
@@ -326,8 +328,11 @@
 
 
 
-    <!-- MODAL DE CRIAR -->
-    <div id="criar-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+
+
+
+<!-- MODAL DE CRIAR -->
+<div id="criar-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <div class="relative bg-slate-700 border border-[#4a7bb7] rounded-base shadow-sm p-4 md:p-6">
                 
@@ -393,6 +398,75 @@
 
 
 
+<!-- GRAFICO DE PRODUTOS CADASTRADOS -->
+
+   @if(Auth::user()->adm == 1)
+    <button id="btnMostrarGrafico" class="mb-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition-colors">
+        Histórico de Cadastros
+    </button>
+
+    <div id="containerGrafico" class="hidden bg-slate-800 p-6 rounded-xl shadow-lg mb-8 border border-slate-700">
+        
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-lg font-bold text-white border-l-4 border-blue-500 pl-3">
+                Histórico de Cadastros
+            </h3>
+            <button id="btnFecharGrafico" class="text-slate-400 hover:text-red-400 font-semibold text-sm transition-colors">
+                ✕ Fechar
+            </button>
+        </div>
+        
+        <div class="relative w-full h-64 md:h-80">
+            <canvas id="graficoProdutos"></canvas>
+        </div>
+        
+    </div>
+
+
+    <!-- js do gráfico  (Se der tempo, tirar daqui) -->
+    <script>
+        let chart = null;
+        const container = document.getElementById('containerGrafico');
+
+        document.getElementById('btnMostrarGrafico').onclick = () => {
+            container.classList.remove('hidden');
+            
+            if (!chart) setTimeout(() => {
+                chart = new Chart(document.getElementById('graficoProdutos'), {
+                    type: 'bar',
+                    data: {
+                        labels: @json($labelsMeses),
+                        datasets: [{ label: 'Cadastros', data: @json($dadosProdutos), backgroundColor: '#3b82f6' }]
+                    },
+                    options: { maintainAspectRatio: false } 
+                });
+            }, 50);
+        };
+
+        document.getElementById('btnFecharGrafico').onclick = () => container.classList.add('hidden');
+    </script>
+
+@endif
+
+<!-- ============================ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <script>  // JS pras previews das fotos, não está na pasta js pra eu poder usar o foreach, depois eu otimizo isso
         // Preview para criar produtos
@@ -421,5 +495,11 @@
     </script>
 
     <script src="https://unpkg.com/flowbite@2.3.0/dist/flowbite.min.js"></script>
+
+
+
+
+    <script src="../../../public/js/sidebar.js"></script>
+
 </body>
 </html>

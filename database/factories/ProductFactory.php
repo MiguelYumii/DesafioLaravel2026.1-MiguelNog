@@ -32,7 +32,7 @@ class ProductFactory extends Factory
             'product_value' => $this->faker->randomFloat(2, 10, 1000), 
             'product_stock' => $this->faker->numberBetween(0, 200), 
             'product_description' => $this->faker->sentence(10), 
-            'product_category' => $this->faker->randomElement(['Periféricos', 'Domésticos', 'Computadores']),
+            'created_at' => $this->faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d H:i:s'),            'product_category' => $this->faker->randomElement(['Periféricos', 'Domésticos', 'Computadores']),
             'product_image' => $this->faker->randomElement([
                                 '/assets/Logos/GordoTriste.jpeg',
                                 '/assets/produtos/teclado1.png',

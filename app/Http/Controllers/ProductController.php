@@ -33,38 +33,53 @@ class ProductController extends Controller
 
     public function buscar(Request $request)
     {
-    $product_category = $request->input('product_category');
-    $termo = $request->input('termo');
-    $destaques = Product::inRandomOrder()->take(18)->get(); 
-    $query = Product::query();
+
+        $product_category = $request->input('product_category');
+        $termo = $request->input('termo');
+        $destaques = Product::inRandomOrder()->take(18)->get(); 
+        $query = Product::query();
 
 
 
-    if (!empty($product_category)) {
-        $query->where('product_category', $product_category);
+        if (!empty($product_category)) {
+            $query->where('product_category', $product_category);
+        }
+
+        if (!empty($termo)) {
+            $query->where('product_name', 'like', '%' . $termo . '%');
+        }
+
+        $products = $query->paginate(30);
+
+        return view('Pagina_Inicial', compact('products', 'destaques')); 
     }
 
-    if (!empty($termo)) {
-        $query->where('product_name', 'like', '%' . $termo . '%');
-    }
 
-    $products = $query->paginate(30);
-
-    return view('Pagina_Inicial', compact('products', 'destaques')); 
-    }
-
-
-
-
-    public function index()  // CRUD Produtos
+public function index()  // CRUD Produtos e gráfico
     {
-        $products = Product::all();
+        $labelsMeses = [];
+        $dadosProdutos = [];
         $products = \App\Models\Product::paginate(50);
-        
-        return view('CRUD_Produtos', compact('products')); 
-        
+
+
+        if (Auth::check() && Auth::user()->adm == 1) { 
+            for ($i = 11; $i >= 0; $i--) {
+                $data = now()->subMonths($i);
+                $labelsMeses[] = $data->translatedFormat('M/Y'); 
+                
+                $totalNoMes = \App\Models\Product::whereYear('created_at', $data->year)
+                                                ->whereMonth('created_at', $data->month)
+                                                ->count();
+                                                
+                $dadosProdutos[] = $totalNoMes;
+            }
+        }
+
+        return view('CRUD_Produtos', compact('products', 'labelsMeses', 'dadosProdutos'));
     }
-    
+
+
+
 
     //criar
     public function store(Request $request)
@@ -88,6 +103,7 @@ class ProductController extends Controller
             'product_stock' => $request->input('Produto_Estoque'),
             'product_description' => $request->input('Produto_Descricao'),
             'product_category' => $request->input('Produto_Categoria'),
+            'created_at' => now()
             ]); 
 
         return redirect()->route('index')->with('success', 'Produto criado com sucesso!');

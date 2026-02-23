@@ -33,7 +33,8 @@ class UsersController extends Controller
     }
     
 
-    //criar
+    
+    //CRIAR USUÁRIO
     public function store(Request $request)
     {
         $user_pf = '';

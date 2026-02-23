@@ -34,21 +34,26 @@ class UserFactory extends Factory
             'balance' => fake()->randomFloat(2, 0, 10000),
             'cpf' => fake()->numerify('###########'),
             'phone' => fake()->phoneNumber(),
-            'userpf' => 'UPF.png',
+            'userpf' => '/assets/UsuarioPF/UPF.png',
             'adm' => 0,
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
+
+
+
+
+
+    public function adm(): static
     {
         return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
+            'adm' => 1,
         ]);
     }
 }
 
+// Para criar usuários COMUNS:
+// \App\Models\User::factory(50)->create();
 
-// php artisan tinker     e dps     \App\Models\User::factory(50)->create();
+// Para criar os Ademiros
+// \App\Models\User::factory(5)->adm()->create();
