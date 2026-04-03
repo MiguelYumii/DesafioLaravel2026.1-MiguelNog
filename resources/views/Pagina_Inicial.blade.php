@@ -63,7 +63,7 @@
                                         <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
                                         <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
 
-                                        <a href="{{route('show', $produto->product_id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
+                                        <a href="{{route('show', $produto->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
                                             COMPRAR
                                         </a>
                                     </div>
@@ -102,15 +102,15 @@
                         @foreach ($destaques->chunk(6) as $index => $chunk)
                             <div class="hidden duration-700 ease-in-out" data-carousel-item="{{ $index == 0 ? 'active' : '' }}">
                                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4 w-full h-full px-8 md:px-12 py-2"> 
-                                    @foreach ($chunk as $produto)
+                                    @foreach ($chunk as $product)
                                         <div class="group bg-[#e5e5e5] shadow-sm rounded-xl flex flex-col items-center p-2 h-fit border border-gray-300 hover:shadow-md transition-shadow">
                                             <div class="relative w-[90%] aspect-square overflow-hidden rounded-lg border bg-white">
-                                                <img src="{{ asset($produto->product_image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $produto->product_name }}">
+                                                <img src="{{ asset($product->product_image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $product->product_name }}">
                                             </div>
                                             <div class="w-full p-2">
-                                                <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
-                                                <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
-                                                <a href="{{route('show', $produto->product_id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
+                                                <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $product->product_name }}</h2>
+                                                <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($product->product_value, 2, ',', '.') }}</p>
+                                                <a href="{{route('show', $product->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
                                                     COMPRAR
                                                 </a>
                                             </div>
@@ -148,15 +148,15 @@
                             @foreach ($products->where('product_category', 'Computadores')->take(30)->chunk(6) as $index => $chunk)
                                 <div class="hidden duration-700 ease-in-out" data-carousel-item="{{ $index == 0 ? 'active' : '' }}">
                                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4 w-full h-full px-8 md:px-12 py-2"> 
-                                        @foreach ($chunk as $produto)
+                                        @foreach ($chunk as $product)
                                             <div class="group bg-[#e5e5e5] shadow-sm rounded-xl flex flex-col items-center p-2 h-fit border border-gray-300 hover:shadow-md transition-shadow">
                                                 <div class="relative w-[90%] aspect-square overflow-hidden rounded-lg border bg-white">
-                                                    <img src="{{ asset($produto->product_image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $produto->product_name }}">
+                                                    <img src="{{ asset($product->product_image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $produto->product_name }}">
                                                 </div>
                                                 <div class="w-full p-2">
-                                                    <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
-                                                    <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
-                                                    <a href="{{route('show', $produto->product_id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
+                                                    <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $product->product_name }}</h2>
+                                                    <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($product->product_value, 2, ',', '.') }}</p>
+                                                    <a href="{{route('show', $product->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
                                                         COMPRAR
                                                     </a>
                                                 </div>
@@ -202,7 +202,7 @@
                                                 <div class="w-full p-2">
                                                     <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
                                                     <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
-                                                    <a href="{{route('show', $produto->product_id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
+                                                    <a href="{{route('show', $produto->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
                                                         COMPRAR
                                                     </a>
                                                 </div>
@@ -248,7 +248,7 @@
                                                 <div class="w-full p-2">
                                                     <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
                                                     <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
-                                                    <a href="{{route('show', $produto->product_id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
+                                                    <a href="{{route('show', $produto->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
                                                         COMPRAR
                                                     </a>
                                                 </div>

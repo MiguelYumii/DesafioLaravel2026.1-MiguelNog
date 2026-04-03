@@ -95,7 +95,7 @@
                             </button>
                         @else
 
-                            <!-- BLOCK caso acabe o estoque -->
+                            <!-- Caso acabe estoqiue -->
                                 @if($produto->product_stock > 0)
                                     <label for="modalCompraToggle" type="button" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full flex justify-center items-center gap-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -152,7 +152,7 @@
                 </div>
             </div>
 
-            <form action="{{route('produto.comprar',$produto->product_id)}}" method="POST">
+            <form action="{{route('produto.comprar',$produto->id)}}" method="POST">
                 @csrf
                 <div class="mb-6">
                     <label class="text-slate-400 text-xs block mb-2 uppercase tracking-widest">Quantidade</label>

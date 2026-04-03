@@ -12,7 +12,7 @@ class Product extends Model
     
 
     protected $table = 'product';
-    protected $primaryKey = 'product_id';
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
 

@@ -78,12 +78,12 @@ class PagBankController extends Controller
                 "tax_id" => "12345678909"
             ],
             "items" => [
-                
-                "reference_id" => "prod-" . $produto->product_id,
-                "name" => $produto->product_name,
-                "quantity" => (int)$quantidade,
-                "unit_amount" => (int)($produto->product_value * 100)
-                
+                [
+                    "reference_id" => "prod-" . $produto->product_id,
+                    "name" => $produto->product_name,
+                    "quantity" => (int)$quantidade,
+                    "unit_amount" => (int)round($produto->product_value * 100)
+                ]
             ],
             "redirect_url" => "https://www.google.com.br",
         ];
