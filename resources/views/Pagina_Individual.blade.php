@@ -88,7 +88,7 @@
         
         <!-- ===== BOTÃO DE COMPRA ===== -->
                     @auth
-                        @if(auth()->user()->is_admin)
+                        @if(auth()->user()->adm == 1)
                             <button disabled class="w-full bg-gray-400 text-white font-bold py-4 px-6 rounded-xl cursor-not-allowed shadow-sm text-lg flex justify-center items-center gap-2 opacity-70">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                                 SEM ACESSO

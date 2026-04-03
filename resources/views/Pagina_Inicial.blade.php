@@ -63,9 +63,13 @@
                                         <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
                                         <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
 
-                                        <a href="{{route('show', $produto->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
-                                            COMPRAR
-                                        </a>
+                                        @if(Auth::check() && Auth::user()->adm == 1)
+                                            <button disabled class="bg-gray-400 text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center cursor-not-allowed opacity-70 mt-2 text-xs md:text-sm">COMPRAR</button>
+                                        @else
+                                            <a href="{{route('show', $produto->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
+                                                COMPRAR
+                                            </a>
+                                        @endif
                                     </div>
                                 </div>
                             @empty
@@ -110,9 +114,13 @@
                                             <div class="w-full p-2">
                                                 <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $product->product_name }}</h2>
                                                 <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($product->product_value, 2, ',', '.') }}</p>
-                                                <a href="{{route('show', $product->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
-                                                    COMPRAR
-                                                </a>
+                                                @if(Auth::check() && Auth::user()->adm == 1)
+                                                    <button disabled class="bg-gray-400 text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center cursor-not-allowed opacity-70 mt-2 text-xs md:text-sm">COMPRAR</button>
+                                                @else
+                                                    <a href="{{route('show', $product->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
+                                                        COMPRAR
+                                                    </a>
+                                                @endif
                                             </div>
                                         </div>
                                     @endforeach
@@ -202,9 +210,13 @@
                                                 <div class="w-full p-2">
                                                     <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
                                                     <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
-                                                    <a href="{{route('show', $produto->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
-                                                        COMPRAR
-                                                    </a>
+                                                    @if(Auth::check() && Auth::user()->adm == 1)
+                                                        <button disabled class="bg-gray-400 text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center cursor-not-allowed opacity-70 mt-2 text-xs md:text-sm">COMPRAR</button>
+                                                    @else
+                                                        <a href="{{route('show', $produto->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
+                                                            COMPRAR
+                                                        </a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         @endforeach
