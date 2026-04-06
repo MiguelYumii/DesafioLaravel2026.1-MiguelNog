@@ -31,10 +31,14 @@
         <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 bg-slate-800 p-4 rounded-lg border border-slate-700 shadow-md">
             <h2 class="text-xl font-bold text-white">Gerenciamento de Produtos</h2>
             
-            @if(auth()->check()) 
-            <button type="button" data-modal-target="criar-modal" data-modal-toggle="criar-modal" class="bg-[#058C42] hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-medium flex items-center justify-center transition-colors shadow-sm">
-                + Criar Produto
-            </button>
+            @if(Auth::check() && Auth::user()->adm == 0)
+                <button type="button" data-modal-target="criar-modal" data-modal-toggle="criar-modal" class="bg-[#058C42] hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-medium flex items-center justify-center transition-colors shadow-sm">
+                    + Criar Produto
+                </button>
+            @else
+                <button type="button" disabled aria-disabled="true" title="Apenas usuários" class="bg-[#6b6b6b] text-white px-5 py-2.5 rounded-lg font-medium flex items-center justify-center transition-colors shadow-sm cursor-not-allowed opacity-70">
+                    Apenas usuários
+                </button>
             @endif
 
         </div>
@@ -52,7 +56,7 @@
                         <th scope="col" class="px-6 py-3 font-medium"> Foto </th>
                         <th scope="col" class="px-6 py-3 font-medium"> Nome </th>
                         <th scope="col" class="px-6 py-3 font-medium"> Categoria </th>
-                        <th scope="col" class="px-6 py-3 font-medium"> ID do Autor </th>
+                        <th scope="col" class="px-6 py-3 font-medium"> Autor </th>
                         <th scope="col" class="px-6 py-3 font-medium"> Ações </th>
                     </tr>
                 </thead>
@@ -62,7 +66,7 @@
                     @foreach ($products as $produto)
 
                     <tr class="bg-slate-800 even:bg-[#03223F] border-b border-slate-700 text-center hover:bg-slate-700/50 transition-colors">
-                        <th class="text-white px-6 py-4" > {{$produto->product_id}} </th>
+                        <th class="text-white px-6 py-4" > {{$produto->id}} </th>
 
                         <td class="text-white px-6 py-4">
                             @if($produto->product_image && !empty($produto->product_image))
@@ -76,14 +80,14 @@
 
                         <td class="text-white px-6 py-4 text-center"> {{$produto->product_name}} </td>
                         <td class="text-white px-6 py-4 text-center"> {{$produto->product_category}} </td>
-                        <td class="text-white px-6 py-4 text-center"> {{$produto->product_autor}} </td>
+                        <td class="text-white px-6 py-4 text-center"> {{ optional($produto->author)->name ?? $produto->product_autor }} </td>
                         <td class="px-6 py-4">
 
                             <div class="text-white flex items-center justify-center gap-5">
                             @if(auth()->check() && auth()->user()->id == $produto->product_autor)
-                                <button data-modal-target="ver-modal-{{$produto->product_id}}" data-modal-toggle="ver-modal-{{$produto->product_id}}" class="font-medium text-[#058C42] hover:text-green-400 hover:underline">Ver</button>
-                                <button data-modal-target="editar-modal-{{$produto->product_id}}" data-modal-toggle="editar-modal-{{$produto->product_id}}" class="font-medium text-[#f2ff38] hover:text-yellow-300 hover:underline">Editar</button>
-                                <button data-modal-target="popup-modal-{{$produto->product_id}}" data-modal-toggle="popup-modal-{{$produto->product_id}}" class="font-medium text-[#bd0f0f] hover:text-red-400 hover:underline">Excluir</button>
+                                <button data-modal-target="ver-modal-{{$produto->id}}" data-modal-toggle="ver-modal-{{$produto->id}}" class="font-medium text-[#058C42] hover:text-green-400 hover:underline">Ver</button>
+                                <button data-modal-target="editar-modal-{{$produto->id}}" data-modal-toggle="editar-modal-{{$produto->id}}" class="font-medium text-[#f2ff38] hover:text-yellow-300 hover:underline">Editar</button>
+                                <button data-modal-target="popup-modal-{{$produto->id}}" data-modal-toggle="popup-modal-{{$produto->id}}" class="font-medium text-[#bd0f0f] hover:text-red-400 hover:underline">Excluir</button>
                             @else
                                 <span class="text-gray-500 italic">Sem Acesso</span>
                              @endif
@@ -131,9 +135,9 @@
 
                 <div class="mt-auto w-full pt-4 border-t border-slate-700/80">
                     <div class="flex items-center justify-center gap-4">
-                            <button data-modal-target="ver-modal-{{$produto->product_id}}" data-modal-toggle="ver-modal-{{$produto->product_id}}" class="font-medium text-[#058C42] hover:text-green-400 hover:underline transition-colors">Ver</button>
-                            <button data-modal-target="editar-modal-{{$produto->product_id}}" data-modal-toggle="editar-modal-{{$produto->product_id}}" class="font-medium text-[#f2ff38] hover:text-yellow-300 hover:underline transition-colors">Editar</button>
-                            <button data-modal-target="popup-modal-{{$produto->product_id}}" data-modal-toggle="popup-modal-{{$produto->product_id}}" class="font-medium text-[#bd0f0f] hover:text-red-400 hover:underline transition-colors">Excluir</button>
+                            <button data-modal-target="ver-modal-{{$produto->id}}" data-modal-toggle="ver-modal-{{$produto->id}}" class="font-medium text-[#058C42] hover:text-green-400 hover:underline transition-colors">Ver</button>
+                            <button data-modal-target="editar-modal-{{$produto->id}}" data-modal-toggle="editar-modal-{{$produto->id}}" class="font-medium text-[#f2ff38] hover:text-yellow-300 hover:underline transition-colors">Editar</button>
+                            <button data-modal-target="popup-modal-{{$produto->id}}" data-modal-toggle="popup-modal-{{$produto->id}}" class="font-medium text-[#bd0f0f] hover:text-red-400 hover:underline transition-colors">Excluir</button>
                     </div>
                 </div>
 
@@ -217,7 +221,7 @@
 
     <!-- MODAL DE VISUALIZAR -->
     @foreach ($products as $produto)   
-    <div id="ver-modal-{{$produto->product_id}}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div id="ver-modal-{{$produto->id}}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <div class="relative bg-slate-700 border border-default rounded-base shadow-sm p-4 md:p-6">
                 
@@ -270,13 +274,13 @@
                     <div>
                         <label class="block mb-2.5 text-sm font-medium text-white">Autor</label>
                         <div class="bg-slate-600 border border-default-medium text-white text-sm rounded-base block w-full px-3 py-2.5 shadow-xs">
-                            {{$produto->product_autor}}
+                            {{ optional($produto->author)->name ?? $produto->product_autor }}
                         </div>
                     </div> 
                 </div>
 
                 <div class="flex items-center justify-end space-x-4 border-t border-default pt-4 md:pt-6">
-                    <button data-modal-hide="ver-modal-{{$produto->product_id}}" type="button" class="text-white bg-slate-800  box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-6 py-2.5 focus:outline-none transition-all">
+                    <button data-modal-hide="ver-modal-{{$produto->id}}" type="button" class="text-white bg-slate-800  box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-6 py-2.5 focus:outline-none transition-all">
                         Fechar
                     </button>
                 </div>
@@ -287,20 +291,20 @@
 
 
     <!-- MODAL DE EXCLUIR -->
-    <div id="popup-modal-{{$produto->product_id}}" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div id="popup-modal-{{$produto->id}}" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <div class="relative bg-slate-700 border border-default rounded-base shadow-sm p-4 md:p-6">
                 <div class="p-4 md:p-5 text-center">
                     <svg class="mx-auto mb-4 text-fg-disabled w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
                     <h3 class="mb-6 text-white">Tem certeza que deseja excluir este produto? Está ação é irreversível</h3>
                     
-                    <form action="{{ route('destroy', $produto->product_id) }}" method="POST" class="flex items-center space-x-4 justify-center">    
+                    <form action="{{ route('destroy', $produto->id) }}" method="POST" class="flex items-center space-x-4 justify-center">    
                         @csrf
                         @method('delete')
                         <button type="submit" class="text-white bg-red-600 box-border border border-transparent hover:bg-red-700 focus:ring-4 focus:ring-red-300 shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
                             Tenho certeza
                         </button>
-                        <button data-modal-hide="popup-modal-{{$produto->product_id}}" type="button" class="text-white bg-slate-800 box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
+                        <button data-modal-hide="popup-modal-{{$produto->id}}" type="button" class="text-white bg-slate-800 box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
                             Não
                         </button>
                     </form>
@@ -317,7 +321,7 @@
 
 <!-- MODAL DE EDITAR -->
 
-    <div id="editar-modal-{{$produto->product_id}}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div id="editar-modal-{{$produto->id}}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <div class="relative bg-slate-700 border border-default rounded-base shadow-sm p-4 md:p-6">
                 
@@ -327,14 +331,14 @@
                     </h3>
                 </div>
                 
-                <form action="{{route('update', $produto->product_id)}}" method="POST" enctype="multipart/form-data">
+                <form action="{{route('update', $produto->id)}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('put')
 
-                    <img id="preview-edit-{{$produto->product_id}}" src="{{$produto->foto ?: '/assets/ProdutoPF/UPF.png'}}" class="block mx-auto w-35 h-35 rounded-md mt-5 border-2 border-[#4a7bb7] object-cover">
+                    <img id="preview-edit-{{$produto->id}}" src="{{$produto->foto ?: '/assets/ProdutoPF/UPF.png'}}" class="block mx-auto w-35 h-35 rounded-md mt-5 border-2 border-[#4a7bb7] object-cover">
                     <div class="col-span-2 flex flex-col items-center mb-2">
-                        <label for="foto-edit-{{$produto->product_id}}" class="cursor-pointer text-blue-400 hover:underline">Selecionar foto de perfil</label>
-                        <input type="file" name="foto" id="foto-edit-{{$produto->product_id}}" accept="image/*" class="hidden" onchange="if(this.files[0]) document.getElementById('preview-edit-{{$produto->product_id}}').src = window.URL.createObjectURL(this.files[0])">
+                        <label for="foto-edit-{{$produto->id}}" class="cursor-pointer text-blue-400 hover:underline">Selecionar foto de perfil</label>
+                        <input type="file" name="foto" id="foto-edit-{{$produto->id}}" accept="image/*" class="hidden" onchange="if(this.files[0]) document.getElementById('preview-edit-{{$produto->id}}').src = window.URL.createObjectURL(this.files[0])">
                     </div>
                     
                     <div>
@@ -374,7 +378,7 @@
                             <svg class="w-4 h-4 me-1.5 -ms-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/></svg>
                             Confirmar alterações
                         </button>
-                        <button data-modal-hide="editar-modal-{{$produto->product_id}}" type="button" class="text-white bg-slate-800 box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">Cancelar</button>
+                        <button data-modal-hide="editar-modal-{{$produto->id}}" type="button" class="text-white bg-slate-800 box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">Cancelar</button>
                     </div>
 
                 </form>
@@ -412,7 +416,7 @@
 
                     <div class="flex flex-col items-center mb-2">
                         <label for="foto-create" class="cursor-pointer text-blue-400 hover:underline">Selecionar foto do Produto</label>
-                        <input type="file" name="foto" id="foto-create" accept="image/*" class="hidden" required>
+                        <input type="file" name="foto" id="foto-create" accept="image/*" class="hidden">
                     </div>
 
                     <div>
@@ -492,12 +496,12 @@
 
         // Preview para editar produtos
         @foreach ($products as $produto)
-        const inputEdit{{$produto->product_id}} = document.getElementById('foto-edit-{{$produto->product_id}}');
-        if(inputEdit{{$produto->product_id}}) {
-            inputEdit{{$produto->product_id}}.addEventListener('change', function(e) {
+        const inputEdit{{$produto->id}} = document.getElementById('foto-edit-{{$produto->id}}');
+        if(inputEdit{{$produto->id}}) {
+            inputEdit{{$produto->id}}.addEventListener('change', function(e) {
                 const [file] = e.target.files;
                 if(file) {
-                    document.getElementById('preview-edit-{{$produto->product_id}}').src = URL.createObjectURL(file);
+                    document.getElementById('preview-edit-{{$produto->id}}').src = URL.createObjectURL(file);
                 }
             });
         }

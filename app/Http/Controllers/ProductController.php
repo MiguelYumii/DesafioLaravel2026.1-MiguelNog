@@ -106,31 +106,31 @@ public function index()  // CRUD Produtos e gráfico
             'created_at' => now()
             ]); 
 
-        return redirect()->route('index')->with('success', 'Produto criado com sucesso!');
+        return redirect('/CRUD_Produtos')->with('success', 'Produto criado com sucesso!');
     }
 
 
     //apagar
-    public function destroy($product_id)
+    public function destroy($id)
     {
-        $product = Product::findOrFail($product_id);
+        $product = Product::findOrFail($id);
         $product->delete();
         
         if($product->product_image && File::exists(public_path($product->product_image))) {
              File::delete(public_path($product->product_image)); 
         }
 
-        return redirect()->route('index')->with('success', 'Produto deletado com sucesso!');
+        return redirect('/CRUD_Produtos')->with('success', 'Produto deletado com sucesso!');
     }
 
 
 
     //editar
-    public function update(Request $request, $product_id)
+    public function update(Request $request, $id)
     {
 
 
-        $product = Product::findOrFail($product_id);
+        $product = Product::findOrFail($id);
         $data = $request->all();
 
         
@@ -161,6 +161,6 @@ public function index()  // CRUD Produtos e gráfico
     
   
         $product->update($updateData);
-        return redirect()->route('index');
+        return redirect('/CRUD_Produtos');
     }
 }

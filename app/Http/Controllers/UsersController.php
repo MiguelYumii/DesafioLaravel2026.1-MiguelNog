@@ -26,10 +26,17 @@ class UsersController extends Controller
 
     public function index()  
     {
-        $users = User::all();
-        $users = \App\Models\User::paginate(50);
-        $enderecos = Endereco::all();
-        return view('CRUD_Usuario', compact('users', 'enderecos')); 
+        $current = Auth::user();
+
+        if ($current && $current->adm == 1) {
+            $users = User::paginate(50);
+            $enderecos = Endereco::all();
+        } else {
+            $users = User::where('id', $current->id)->paginate(50);
+            $enderecos = Endereco::where('usuarios_user_id', $current->id)->get();
+        }
+
+        return view('CRUD_Usuario', compact('users', 'enderecos'));
     }
     
 
@@ -78,7 +85,8 @@ class UsersController extends Controller
                 'endress_StreetNumber' => $request->input('endress_StreetNumber'),
                 'endress_cep' => $cep,
                 'endress_StreetExtra' => $request->input('endress_StreetExtra'),
-                'usuarios_user_id' => $user->id, 
+                'endress_user' => $user->id,
+                'usuarios_user_id' => $user->id,
                 'endress_Bairro' => $viaCepData['bairro'] ?? '',
                 'endress_street' => $viaCepData['logradouro'] ?? '',
                 'endress_Estado' => $viaCepData['uf'] ?? '',

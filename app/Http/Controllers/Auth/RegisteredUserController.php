@@ -76,6 +76,7 @@ public function store(Request $request): RedirectResponse
                 'endress_StreetNumber' => $request->input('endress_StreetNumber'),
                 'endress_cep' => $cep,
                 'endress_StreetExtra' => $request->input('endress_StreetExtra'),
+                'endress_user' => $user->id,
                 'usuarios_user_id' => $user->id, 
                 'endress_Bairro' => $viaCepData['bairro'] ?? '',
                 'endress_street' => $viaCepData['logradouro'] ?? '',

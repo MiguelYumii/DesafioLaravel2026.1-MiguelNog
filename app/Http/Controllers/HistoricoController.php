@@ -11,6 +11,10 @@ class HistoricoController extends Controller
 {
     public function index()
     {
+        if (!Auth::check() || Auth::user()->adm == 1) {
+            abort(403);
+        }
+
         $compras = BuyLog::where('usuarios_user_id', Auth::id())
                          ->orderBy('buy_data', 'desc')
                          ->get();
@@ -22,6 +26,10 @@ class HistoricoController extends Controller
     public function gerarPDF(Request $request)
     {
         
+
+        if (!Auth::check() || Auth::user()->adm == 1) {
+            abort(403);
+        }
 
         $compras = BuyLog::with('produto') 
                          ->where('usuarios_user_id', Auth::id())

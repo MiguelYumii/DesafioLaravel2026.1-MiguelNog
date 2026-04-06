@@ -37,7 +37,7 @@
                     <td>{{ \Carbon\Carbon::parse($venda->sale_data)->format('d/m/Y H:i') }}</td>
                     <td class="valor">R$ {{ number_format($venda->sale_ProductValue, 2, ',', '.') }}</td>
                     <td>{{ $venda->sale_client }}</td>
-                    <td>{{ $venda->sale_autor }}</td>
+                    <td>{{ $venda->user->name ?? $venda->sale_autor }}</td>
                 </tr>
             @empty
                 <tr>

@@ -33,7 +33,7 @@ Route::get('/Navbar', [UsersController::class, 'navbar']);
 
     
 
-Route::get('/CRUD_Usuario', [UsersController::class, 'index']);
+Route::get('/CRUD_Usuario', [UsersController::class, 'index'])->middleware('auth');
 Route::get('/CRUD_Adm', [AdmController::class, 'index']);
 Route::get('/CRUD_Produtos', [ProductController::class, 'index']);
 
@@ -93,8 +93,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/products', [ProductController::class, 'index'])->name('index');
     Route::post('/products', [ProductController::class, 'store'])->name('store');
-    Route::put('/products/{product_id}', [ProductController::class, 'update'])->name('update');
-    Route::delete('/products/{product_id}', [ProductController::class, 'destroy'])->name('destroy');     
+    Route::put('/products/{id}', [ProductController::class, 'update'])->name('update');
+    Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('destroy');     
 });
 // =====================================//
 
@@ -110,8 +110,10 @@ Route::get('/checkout/ativar/{checkout_id}', [PagBankController::class, 'ativarC
 Route::post('/produto/comprar/{id}', [PagBankController::class, 'processarCompra'])->name('produto.comprar');
 
 
-Route::get('/meu-historico', [HistoricoController::class, 'index'])->name('historico.index');
-Route::post('/meu-historico/pdf', [HistoricoController::class, 'gerarPDF'])->name('historico.pdf');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/meu-historico', [HistoricoController::class, 'index'])->name('historico.index');
+    Route::post('/meu-historico/pdf', [HistoricoController::class, 'gerarPDF'])->name('historico.pdf');
+});
 
 
 

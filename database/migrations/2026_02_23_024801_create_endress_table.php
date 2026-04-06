@@ -19,7 +19,10 @@ return new class extends Migration
             $table->string('endress_StreetExtra', 200)->nullable();
             $table->integer('endress_cep');
             $table->integer('endress_user'); 
-            $table->foreignId('usuarios_user_id')->constrained('users'); 
+            $table->foreignId('usuarios_user_id')->constrained('users');
+            $table->string('endress_Bairro', 100);
+            $table->string('endress_Estado', 100);
+            $table->string('endress_City', 100); 
             $table->timestamps();
 });
     }

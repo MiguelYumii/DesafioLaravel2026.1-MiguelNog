@@ -27,7 +27,8 @@ class Endereco extends Authenticatable
         'endress_City',
         'endress_Estado',
         'endress_cep',
-        'usuarios_user_id'
+        'usuarios_user_id',
+        'endress_user'
 
     ];
 }

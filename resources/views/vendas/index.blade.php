@@ -88,7 +88,7 @@
                     <td class="px-6 py-4 font-bold text-white">R$ {{ number_format($venda->sale_ProductValue, 2, ',', '.') }}</td>
                     <td class="px-6 py-4 italic text-gray-300">{{ $venda->sale_client }}</td>
                     @if(Auth::user()->adm == 1)
-                        <td class="px-6 py-4 text-blue-400 font-bold">{{ $venda->sale_autor }}</td>
+                        <td class="px-6 py-4 text-blue-400 font-bold">{{ $venda->user->name ?? $venda->sale_autor }}</td>
                     @endif
                 </tr>
                 @empty

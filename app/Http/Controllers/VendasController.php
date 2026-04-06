@@ -15,12 +15,9 @@ class VendasController extends Controller
         $userId = Auth::user()->id; 
 
         if (Auth::user()->adm == 1) { 
-            $vendas = SaleLog::orderBy('sale_data', 'desc')->get();
+            $vendas = SaleLog::with('user')->orderBy('sale_data', 'desc')->get();
         } else {
-            
-            $vendas = SaleLog::where('usuarios_user_id', $userId)
-                             ->orderBy('sale_data', 'desc')
-                             ->get();
+            $vendas = SaleLog::with('user')->where('usuarios_user_id', $userId) ->orderBy('sale_data', 'desc')->get();
         }
 
         
@@ -51,6 +48,7 @@ class VendasController extends Controller
     public function gerarPDF(Request $request)
     {
         $query = \App\Models\SaleLog::query(); 
+        $query->with('user');
 
         if ($request->has('data_inicio') && $request->has('data_fim')) {
             $query->whereBetween('sale_data', [
@@ -77,6 +75,7 @@ class VendasController extends Controller
     public function exportarExcel(Request $request)
     {
         $query = \App\Models\SaleLog::query(); 
+        $query->with('user');
 
         if ($request->has('data_inicio') && $request->has('data_fim')) {
             $query->whereBetween('sale_data', [
@@ -111,7 +110,7 @@ class VendasController extends Controller
                     \Carbon\Carbon::parse($venda->sale_data)->format('d/m/Y H:i'),
                     'R$ ' . number_format($venda->sale_ProductValue, 2, ',', '.'),
                     $venda->sale_client,
-                    $venda->sale_autor
+                    isset($venda->user) ? $venda->user->name : $venda->sale_autor
                 ];
                 fputcsv($file, $row, ';');
             }

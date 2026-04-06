@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignId('usuarios_user_id')->constrained('users');
             $table->foreignId('product_product_id')->constrained('product');
             $table->timestamps();
-});
+    });
     }
 
     /**

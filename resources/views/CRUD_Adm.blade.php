@@ -42,7 +42,7 @@
                                 <th scope="col" class="px-6 py-3 font-medium"> ID</th>
                                 <th scope="col" class="px-6 py-3 font-medium"> Foto </th>
                                 <th scope="col" class="px-6 py-3 font-medium"> Nome </th>
-                                <th scope="col" class="px-6 py-3 font-medium"> Email </th>
+                        
                                 <th scope="col" class="px-6 py-3 font-medium"> Cargo </th>
                                 <th scope="col" class="px-6 py-3 font-medium"> Ações </th>
                             </tr>
@@ -64,7 +64,7 @@
                                     @endif
                                 </td>
                                 <td class="text-white px-6 py-4 text-center"> {{$User->name}} </td>
-                                <td class="text-white px-6 py-4 text-center"> {{$User->email}} </td>
+                               
                                 <td class="text-white px-6 py-4 text-center">
                                     @if($User->adm == 1)  
                                         <span class="text-green-500 font-medium">Administrador</span>
@@ -74,7 +74,7 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-white flex items-center justify-center gap-5">
-                                    @if(auth()->user()->adm == 1 || auth()->user()->id == $User->id)
+                                    @if(auth()->user()->id == $User->id || (auth()->user()->adm == 1 && auth()->user()->id == $User->createdBy))
                                         <button data-modal-target="ver-modal-{{$User->id}}" data-modal-toggle="ver-modal-{{$User->id}}" class="font-medium text-[#058C42] hover:text-green-400 hover:underline">Ver</button>
                                         <button data-modal-target="editar-modal-{{$User->id}}" data-modal-toggle="editar-modal-{{$User->id}}" class="font-medium text-[#f2ff38] hover:text-yellow-300 hover:underline">Editar</button>
                                         <button data-modal-target="popup-modal-{{$User->id}}" data-modal-toggle="popup-modal-{{$User->id}}" class="font-medium text-[#bd0f0f] hover:text-red-400 hover:underline">Excluir</button>
@@ -116,9 +116,7 @@
                         <h3 class="text-lg font-semibold text-white text-center w-full truncate px-2" title="{{$User->name}}">
                             {{$User->name}}
                         </h3>
-                        <p class="text-sm text-gray-400 text-center w-full truncate mb-3" title="{{$User->email}}">
-                            {{$User->email}}
-                        </p>
+                        
 
                         <div class="mb-5">
                             @if($User->adm == 1)  
@@ -129,7 +127,7 @@
                         </div>
 
                         <div class="text-white flex items-center justify-center gap-5">
-                            @if(auth()->user()->id == $User->id || auth()->user()->id == $User->createdBy)
+                            @if(auth()->user()->id == $User->id || (auth()->user()->adm == 1 && auth()->user()->id == $User->createdBy))
                                 <button data-modal-target="ver-modal-{{$User->id}}" data-modal-toggle="ver-modal-{{$User->id}}" class="font-medium text-[#058C42] hover:text-green-400 hover:underline">Ver</button>
                                 <button data-modal-target="editar-modal-{{$User->id}}" data-modal-toggle="editar-modal-{{$User->id}}" class="font-medium text-[#f2ff38] hover:text-yellow-300 hover:underline">Editar</button>
                                 <button data-modal-target="popup-modal-{{$User->id}}" data-modal-toggle="popup-modal-{{$User->id}}" class="font-medium text-[#bd0f0f] hover:text-red-400 hover:underline">Excluir</button>

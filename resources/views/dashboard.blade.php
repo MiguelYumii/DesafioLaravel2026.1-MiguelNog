@@ -31,25 +31,42 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         
+                        
                         <a href="{{ url('/CRUD_Usuario') }}" class="flex items-center justify-center bg-[#2563eb] hover:bg-blue-500 text-white font-bold py-12 px-4 rounded-2xl shadow-lg transition-all duration-300 hover:scale-105 text-center text-lg">
                             Tabela de Usuários
                         </a>
 
+                        @if(auth()->check() && auth()->user()->adm != 0)
                         <a href="{{ url('/CRUD_Adm') }}" class="flex items-center justify-center bg-[#18446e] hover:bg-[#0e3d69] text-white font-bold py-12 px-4 rounded-2xl shadow-lg transition-all duration-300 hover:scale-105 text-center text-lg">
                             Tabela de Administradores
                         </a>
+                        @else
+                        <div class="flex items-center justify-center bg-[#474747] text-white font-bold py-12 px-4 rounded-2xl shadow-lg text-center text-lg opacity-50 cursor-not-allowed">
+                            Bloqueado: Apenas Administradores
+                        </div>
+                        @endif
+
 
                         <a href="{{ url('/CRUD_Produtos') }}" class="flex items-center justify-center bg-[#16DB65] hover:bg-[#1dff77] text-white font-bold py-12 px-4 rounded-2xl shadow-lg transition-all duration-300 hover:scale-105 text-center text-lg">
                             Tabela de Produtos
                         </a>
 
+
                         <a href="{{ url('/Pagina_Inicial') }}" class="flex items-center justify-center bg-[#2563eb] hover:bg-blue-500 text-white font-bold py-12 px-4 rounded-2xl shadow-lg transition-all duration-300 hover:scale-105 text-center text-lg">
                             Página Inicial
                         </a>
                         
+
+                        @if(auth()->check() && auth()->user()->adm != 1)
                         <a href="{{ url('/meu-historico') }}" class="flex items-center justify-center bg-[#18446e] hover:bg-[#0e3d69] text-white font-bold py-12 px-4 rounded-2xl shadow-lg transition-all duration-300 hover:scale-105 text-center text-lg">
                             Histórico de Compras
                         </a>
+                        @else
+                        <div class="flex items-center justify-center bg-[#474747] text-white font-bold py-12 px-4 rounded-2xl shadow-lg text-center text-lg opacity-50 cursor-not-allowed">
+                            Bloqueado: Apenas usuários
+                        </div>
+                        @endif
+
 
                         <a href="{{ url('/vendas') }}" class="flex items-center justify-center bg-[#16DB65] hover:bg-[#1dff77] text-white font-bold py-12 px-4 rounded-2xl shadow-lg transition-all duration-300 hover:scale-105 text-center text-lg">
                             Histórico de Vendas

@@ -40,7 +40,7 @@ class PagBankController extends Controller
             'buy_autor' => $produto->product_autor, // borabill vendedor
             'buy_client' => $user->name, // calabreso comprador
             'usuarios_user_id' => $user->id,
-            'product_product_id' => $produto->product_id
+            'product_product_id' => $produto->id
         ]);
 
         SaleLog::create([
@@ -51,7 +51,7 @@ class PagBankController extends Controller
             'sale_client'       => Auth::user()->name, // bora bill
             'sale_autor'        => $produto->product_autor, // bora filho do bill
             'usuarios_user_id'  => $produto->product_autor, //bora filho denovo
-            'product_product_id'=> $produto->product_id
+            'product_product_id'=> $produto->id
         ]);
 
 
@@ -79,7 +79,7 @@ class PagBankController extends Controller
             ],
             "items" => [
                 [
-                    "reference_id" => "prod-" . $produto->product_id,
+                    "reference_id" => "prod-" . $produto->id,
                     "name" => $produto->product_name,
                     "quantity" => (int)$quantidade,
                     "unit_amount" => (int)round($produto->product_value * 100)

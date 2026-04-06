@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class SaleLog extends Model
 {
@@ -27,6 +28,12 @@ class SaleLog extends Model
     // Relacionamento para pegar a categoria do produto no PDF
     public function produto()
     {
-        return $this->belongsTo(Product::class, 'product_product_id', 'product_id');
+        return $this->belongsTo(Product::class, 'product_product_id', 'id');
+    }
+
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'usuarios_user_id', 'id');
     }
 }

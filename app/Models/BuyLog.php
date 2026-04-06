@@ -32,7 +32,7 @@ class BuyLog extends Model
     public function produto()
     {
 
-        return $this->belongsTo(Product::class, 'product_product_id', 'product_id');    
+        return $this->belongsTo(Product::class, 'product_product_id', 'id');    
         
     }
 }

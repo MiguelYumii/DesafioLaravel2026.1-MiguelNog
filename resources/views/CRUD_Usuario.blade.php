@@ -41,7 +41,6 @@
                                 <th scope="col" class="px-6 py-3 font-medium"> ID</th>
                                 <th scope="col" class="px-6 py-3 font-medium"> Foto </th>
                                 <th scope="col" class="px-6 py-3 font-medium"> Nome </th>
-                                <th scope="col" class="px-6 py-3 font-medium"> Email </th>
                                 <th scope="col" class="px-6 py-3 font-medium"> Cargo </th>
                                 <th scope="col" class="px-6 py-3 font-medium"> Ações </th>
                             </tr>
@@ -61,7 +60,7 @@
                                     @endif
                                 </td>
                                 <td class="text-white px-6 py-4 text-center"> {{$User->name}} </td>
-                                <td class="text-white px-6 py-4 text-center"> {{$User->email}} </td>
+
                                 <td class="text-white px-6 py-4 text-center">
                                     @if($User->adm == 1)  
                                         <span class="text-green-500 font-medium">Administrador</span>
@@ -120,10 +119,7 @@
                         <h3 class="text-lg font-semibold text-white text-center w-full truncate px-2" title="{{$User->name}}">
                             {{$User->name}}
                         </h3>
-                        <p class="text-sm text-gray-400 text-center w-full truncate mb-3" title="{{$User->email}}">
-                            {{$User->email}}
-                        </p>
-
+                        
                         <div class="mb-5">
                             @if($User->adm == 1)  
                                 <span class="bg-green-900/30 text-green-500 border border-green-800 text-xs px-3 py-1 rounded-full font-medium">Administrador</span>

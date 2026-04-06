@@ -71,7 +71,7 @@ class AdmController extends Controller
             ]);
         }
 
-        return redirect()->route('index')->with('success', 'Usuário criado com sucesso!');
+        return redirect('/CRUD_Adm')->with('success', 'Usuário criado com sucesso!');
     }
 
 
@@ -86,7 +86,7 @@ class AdmController extends Controller
              File::delete(public_path($user->userpf)); 
         }
 
-        return redirect()->route('index')->with('success', 'Usuário deletado com sucesso!');
+        return redirect('/CRUD_Adm')->with('success', 'Usuário deletado com sucesso!');
     }
 
 
@@ -150,6 +150,6 @@ class AdmController extends Controller
             $endereco->forceFill($enderecoData)->save();
         }
         
-        return redirect()->route('index');
+        return redirect('/CRUD_Adm');
     }
 }
