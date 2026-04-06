@@ -31,11 +31,11 @@
                     <div class="flex flex-col md:flex-row gap-3 mt-2 w-full">
                         <input type="text" name="termo" value="{{request('termo')}}" placeholder="Buscar produtos..." class="flex-1 w-full bg-white rounded-full px-6 py-2 text-black outline-none focus:ring-2 focus:ring-gray-400">
                         
-                        <select name="product_category" class="w-full md:w-auto bg-[#808080] text-white font-bold px-8 py-2 rounded-full outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer"> 
+                        <select name="product_category" onchange="this.form.submit()" class="w-full md:w-auto bg-[#808080] text-white font-bold px-8 py-2 rounded-full outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer"> 
                             <option value="">Filtrar por: </option>
-                            <option value="computadores" {{ request('product_category') == 'Computadores' ? 'selected' : '' }}>Computadores</option>
-                            <option value="domesticos" {{ request('product_category') == 'Domésticos' ? 'selected' : '' }}>Domésticos</option>
-                            <option value="perifericos" {{ request('product_category') == 'Periféricos' ? 'selected' : '' }}>Periféricos</option>
+                            <option value="Computadores" {{ request('product_category') == 'Computadores' ? 'selected' : '' }}>Computadores</option>
+                            <option value="Domésticos" {{ request('product_category') == 'Domésticos' ? 'selected' : '' }}>Domésticos</option>
+                            <option value="Periféricos" {{ request('product_category') == 'Periféricos' ? 'selected' : '' }}>Periféricos</option>
                         </select>
                     </div>
                 </form>
@@ -54,19 +54,19 @@
                         
                         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6 w-full">
 
-                            @forelse ($products as $produto)
+                            @forelse ($products as $product)
                                 <div class="group bg-[#e5e5e5] shadow-sm rounded-xl flex flex-col items-center p-2 h-fit border border-gray-300 hover:shadow-md transition-shadow">
                                     <div class="relative w-[90%] aspect-square overflow-hidden rounded-lg border bg-white mt-2">
-                                        <img src="{{asset($produto->product_image)}}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $produto->product_name }}">
+                                        <img src="{{asset($product->product_image)}}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $product->product_name }}">
                                     </div>
                                     <div class="w-full p-2 mt-1">
-                                        <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
-                                        <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
+                                        <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $product->product_name }}</h2>
+                                        <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($product->product_value, 2, ',', '.') }}</p>
 
                                         @if(Auth::check() && Auth::user()->adm == 1)
-                                            <button disabled class="bg-gray-400 text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center cursor-not-allowed opacity-70 mt-2 text-xs md:text-sm">COMPRAR</button>
+                                            <button disabled class="bg-gray-400 text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center cursor-not-allowed opacity-70 mt-2 text-xs md:text-sm">Apenas Usuários</button>
                                         @else
-                                            <a href="{{route('show', $produto->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
+                                            <a href="{{route('show', $product->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
                                                 COMPRAR
                                             </a>
                                         @endif
@@ -115,7 +115,7 @@
                                                 <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $product->product_name }}</h2>
                                                 <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($product->product_value, 2, ',', '.') }}</p>
                                                 @if(Auth::check() && Auth::user()->adm == 1)
-                                                    <button disabled class="bg-gray-400 text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center cursor-not-allowed opacity-70 mt-2 text-xs md:text-sm">COMPRAR</button>
+                                                    <button disabled class="bg-gray-400 text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center cursor-not-allowed opacity-70 mt-2 text-xs md:text-sm">Apenas Usuários</button>
                                                 @else
                                                     <a href="{{route('show', $product->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
                                                         COMPRAR
@@ -159,15 +159,19 @@
                                         @foreach ($chunk as $product)
                                             <div class="group bg-[#e5e5e5] shadow-sm rounded-xl flex flex-col items-center p-2 h-fit border border-gray-300 hover:shadow-md transition-shadow">
                                                 <div class="relative w-[90%] aspect-square overflow-hidden rounded-lg border bg-white">
-                                                    <img src="{{ asset($product->product_image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $produto->product_name }}">
+                                                    <img src="{{ asset($product->product_image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $product->product_name }}">
                                                 </div>
-                                                <div class="w-full p-2">
-                                                    <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $product->product_name }}</h2>
-                                                    <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($product->product_value, 2, ',', '.') }}</p>
-                                                    <a href="{{route('show', $product->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
-                                                        COMPRAR
-                                                    </a>
-                                                </div>
+                                                        <div class="w-full p-2">
+                                                            <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $product->product_name }}</h2>
+                                                            <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($product->product_value, 2, ',', '.') }}</p>
+                                                            @if(Auth::check() && Auth::user()->adm == 1)
+                                                                <button disabled class="bg-gray-400 text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center cursor-not-allowed opacity-70 mt-2 text-xs md:text-sm">Apenas Usuários</button>
+                                                            @else
+                                                                <a href="{{route('show', $product->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
+                                                                    COMPRAR
+                                                                </a>
+                                                            @endif
+                                                        </div>
                                             </div>
                                         @endforeach
                                     </div>
@@ -202,18 +206,18 @@
                             @foreach ($products->where('product_category', 'Periféricos')->take(30)->chunk(6) as $index => $chunk)
                                 <div class="hidden duration-700 ease-in-out" data-carousel-item="{{ $index == 0 ? 'active' : '' }}">
                                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4 w-full h-full px-8 md:px-12 py-2"> 
-                                        @foreach ($chunk as $produto)
+                                        @foreach ($chunk as $product)
                                             <div class="group bg-[#e5e5e5] shadow-sm rounded-xl flex flex-col items-center p-2 h-fit border border-gray-300 hover:shadow-md transition-shadow">
                                                 <div class="relative w-[90%] aspect-square overflow-hidden rounded-lg border bg-white">
-                                                    <img src="{{ asset($produto->product_image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $produto->product_name }}">
+                                                    <img src="{{ asset($product->product_image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $product->product_name }}">
                                                 </div>
                                                 <div class="w-full p-2">
-                                                    <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
-                                                    <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
+                                                    <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $product->product_name }}</h2>
+                                                    <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($product->product_value, 2, ',', '.') }}</p>
                                                     @if(Auth::check() && Auth::user()->adm == 1)
-                                                        <button disabled class="bg-gray-400 text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center cursor-not-allowed opacity-70 mt-2 text-xs md:text-sm">COMPRAR</button>
+                                                        <button disabled class="bg-gray-400 text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center cursor-not-allowed opacity-70 mt-2 text-xs md:text-sm">Apenas Usuários</button>
                                                     @else
-                                                        <a href="{{route('show', $produto->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
+                                                        <a href="{{route('show', $product->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
                                                             COMPRAR
                                                         </a>
                                                     @endif
@@ -252,17 +256,21 @@
                             @foreach ($products->where('product_category', 'Domésticos')->take(30)->chunk(6) as $index => $chunk)
                                 <div class="hidden duration-700 ease-in-out" data-carousel-item="{{ $index == 0 ? 'active' : '' }}">
                                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4 w-full h-full px-8 md:px-12 py-2"> 
-                                        @foreach ($chunk as $produto)
+                                        @foreach ($chunk as $product)
                                             <div class="group bg-[#e5e5e5] shadow-sm rounded-xl flex flex-col items-center p-2 h-fit border border-gray-300 hover:shadow-md transition-shadow">
                                                 <div class="relative w-[90%] aspect-square overflow-hidden rounded-lg border bg-white">
-                                                    <img src="{{ asset($produto->product_image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $produto->product_name }}">
+                                                    <img src="{{ asset($product->product_image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" alt="{{ $product->product_name }}">
                                                 </div>
                                                 <div class="w-full p-2">
-                                                    <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $produto->product_name }}</h2>
-                                                    <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($produto->product_value, 2, ',', '.') }}</p>
-                                                    <a href="{{route('show', $produto->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
-                                                        COMPRAR
-                                                    </a>
+                                                    <h2 class="text-black font-bold text-[10px] md:text-xs leading-tight line-clamp-2 min-h-[32px]">{{ $product->product_name }}</h2>
+                                                    <p class="text-green-900 font-extrabold mt-2 text-xs md:text-sm">R$ {{ number_format($product->product_value, 2, ',', '.') }}</p>
+                                                    @if(Auth::check() && Auth::user()->adm == 1)
+                                                        <button disabled class="bg-gray-400 text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center cursor-not-allowed opacity-70 mt-2 text-xs md:text-sm">Apenas Usuários</button>
+                                                    @else
+                                                        <a href="{{route('show', $product->id) }}" class="bg-green-900 hover:bg-green-800 flex items-center justify-center text-white font-bold py-2 px-2 md:px-10 max-w-full w-full rounded-md text-center transition-colors mt-2 text-xs md:text-sm"> 
+                                                            COMPRAR
+                                                        </a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         @endforeach

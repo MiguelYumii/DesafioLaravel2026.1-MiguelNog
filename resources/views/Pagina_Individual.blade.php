@@ -70,7 +70,7 @@
                         <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Informações do Vendedor</h3>
                         <div class="flex flex-col gap-2">
                             <p class="font-semibold flex items-center">
-                                <span class="text-xl mr-2">Autor: </span> {{ $produto->product_autor ?? 'Nome não informado' }}
+                                <span class="text-xl mr-2">Autor: </span> {{ optional($produto->author)->name ?? $produto->product_autor ?? 'Nome não informado' }}
                             </p>
                             <p class="font-semibold flex items-center">
                                 <span class="text-xl mr-2">Telefone: </span> {{ $produto->product_AutorPhone ?? '(00) 00000-0000' }}
